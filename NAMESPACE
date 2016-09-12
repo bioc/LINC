@@ -1,0 +1,59 @@
+
+importFrom(grDevices, colors)
+importFrom(utils, str, tail, write.table)
+importFrom(reshape2, melt)
+importFrom(Biobase, rowMedians)
+importFrom(mygene, getGenes)
+
+import(stats)
+import(methods)
+
+importFrom(DOSE, enrichDO)
+importFrom(ReactomePA, enrichPathway)
+importFrom(clusterProfiler, enrichGO, compareCluster)
+
+importFrom(gridExtra, grid.arrange)
+importFrom(grid, rasterGrob)
+importFrom(grid, textGrob)
+importFrom(grid, gpar)
+importFrom(gridExtra, arrangeGrob)
+importFrom(ape, as.phylo)
+importFrom(ggtree, ggtree)
+importFrom(ggtree, plot)
+importFrom(ggtree, gheatmap)
+importFrom(ggtree, geom_tiplab)
+importFrom(png, readPNG)
+importFrom(sva, svaseq)
+
+importFrom(org.Hs.eg.db, org.Hs.eg.db)
+importFrom(ggplot2, ggplot, geom_point, geom_histogram, geom_bar, geom_line, element_text, ggtitle, theme, aes, geom_boxplot, element_rect, element_blank, geom_freqpoly, ylim, xlim, scale_x_continuous, scale_y_continuous, element_line, geom_text, scale_colour_manual, scale_fill_manual, geom_vline, coord_flip, scale_x_reverse, scale_y_reverse, scale_fill_gradient2, guides)
+
+
+export(linc)
+export(justlinc)
+export(clusterlinc)
+export(singlelinc)
+export(getbio)
+export(getlinc)
+export(plotlinc)
+export(querycluster)
+export(feature)
+export(linctable)
+export(getcoexpr)
+export(overlaylinc)
+
+
+
+exportClass("LINCmatrix")
+exportClass("LINCcluster")
+exportClass("LINCbio")
+exportClass("LINCsingle")
+exportClass("LINCfeature")
+importFrom(Rcpp, sourceCpp)
+useDynLib(LINC, .registration = TRUE)
+
+
+
+
+
+
