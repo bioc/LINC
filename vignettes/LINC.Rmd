@@ -119,11 +119,10 @@ querycluster('647979', queryTitle = 'NORAD',
 
 It can be interesting to compare two objects in terms of intersecting biological terms for shared queries. In the following example the terms for "cellular compartment" from *GO* are compared between two data sets, one representing the tissue Cortex and the other Cerebellum.
 
-```{r fig.width = 9, fig.height = 7.5, fig.keep='first', warning = FALSE, message = FALSE, eval = TRUE}
+```{r fig.width = 9, fig.height = 7.5, fig.keep='first', warning = FALSE, message = FALSE, eval = FALSE}
 # compare two brain tissues using 'overlaylinc'
 ctx_cc <- ctx_cc + feature(customID = "Cortex vs. Cerebellum")
 overlaylinc(ctx_cc, crbl_cc)
-
 # alternatively, compute the intersection of both objects
 brain_cc <- ctx_cc + crbl_cc
 plotlinc(brain_cc)
@@ -164,6 +163,8 @@ It is possible to write the ids of co-expressed genes of a *LINCcluster* object 
 ```{r eval = FALSE}
 linctable(file_name = "crbl_co_expr", input = crbl_cluster)
 ```
+
+
 
 ## 3.0 List of Functions
 ```{r eval = FALSE}
