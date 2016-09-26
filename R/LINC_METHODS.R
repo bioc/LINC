@@ -1905,7 +1905,7 @@ setMethod(f = "singlelinc",
                                  testFun = cor.test,
                                  alternative  = "greater",
                                  threshold = 0.05,
-                                 underth = TRUE,
+                                 underth = FALSE,
                                  coExprCut = NULL,
                                  handleGeneIds = TRUE,
                                  annotateFrom  = 'enrichGO',
@@ -2082,10 +2082,8 @@ setMethod(f = "singlelinc",
             
             ## SECTION2: GENE TRANSLATION
             gn_promise <- identifyGenes(qg_promise)
-            # message(inform05)
             # issue: translate to other gene ids
             if(handleGeneIds == TRUE){
-              # suppressPackageStartupMessages(require(mygene))  
               message(inform05)
               transThis <- function(x){
                 query <- mygene::getGenes(x, fields = "entrezgene")
