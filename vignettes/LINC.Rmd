@@ -40,7 +40,6 @@ The following commands show how *justlinc* is called. (Please note, that the lar
 ```{r fig.width = 14, fig.height = 12, warning = FALSE, message = FALSE, eval = FALSE}
 # 'justlinc' will search for the 10 best candidates
 justlinc(GTEX_LIVER_CRUDE)
-
 # 'justlinc' called with queries
 my_lincRNAs <- c("ENSG00000224153", "ENSG00000197813", "ENSG00000179136",
                  "ENSG00000259439", "ENSG00000267462")
@@ -54,9 +53,8 @@ The optional argument *targetGenes* can be either a gene *'biotype'* (the defaul
 The main function of this package termed *linc()* computes a correlation matrix and perfoms statistical correction. Spearman's rank correlations is the default method. It provides options for the removal of principle components and gene outliers. These methods can indicate whether correlation values are influenced by confounding factors. Negative correlation can be computed by providing a user-defined correlation function (example C). Protein-coding genes and queries (lincRNAs and other ncRNAs) are separated by the argument *codingGenes*, an assignment of protein-coding genes given as a *logical* vector or a vector of gene names. The output of this function is a *LINCmatrix* instance. These objects can be plotted applying the *plotlinc()* function. The resulting plot illustrates the statistics of the input matrix.
 **It is useful to subset the input expression matrix such that only lincRNAs of interest as well as variance- and/or expression-selected protein-coding genes are considered!**
 
-```{r fig.width = 17, fig.height = 10, warning = FALSE, eval = TRUE}
-suppressWarnings(suppressMessages(require(LINC)))
-data(BRAIN_EXPR)
+```{r fig.width = 17, fig.height = 9.5, warning = FALSE, eval = TRUE}
+suppressWarnings(suppressMessages(require(LINC))); data(BRAIN_EXPR)
 
 # (A) call 'linc' with no further arguments
 # 'cerebellum' is a matrix of expression values; rows correspond to genes
