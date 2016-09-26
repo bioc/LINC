@@ -59,20 +59,16 @@ suppressWarnings(suppressMessages(require(LINC)))
 data(BRAIN_EXPR)
 
 # (A) call 'linc' with no further arguments
-crbl_matrix <- linc(cerebellum, codingGenes = pcgenes_crbl, verbose = FALSE)
 # 'cerebellum' is a matrix of expression values; rows correspond to genes
 # 'pcgenes_crbl' is a TRUE/FALSE vector; TRUE indicates a protein-coding gene 
-
+crbl_matrix <- linc(cerebellum, codingGenes = pcgenes_crbl, verbose = FALSE)
 # (B) remove first seven principle components
 crbl_matrix_pc <- linc(cerebellum, codingGenes = pcgenes_crbl, rmPC = c(1:7), verbose = FALSE)
-
 # (C) negative correlation by using 'userFun'
 crbl_matrix_ncor <- linc(cerebellum, codingGenes = pcgenes_crbl,
                          userFun = function(x,y){ -cor(x,y) }, verbose = FALSE)
-
 # (D) remove outliers using the ESD method
 crbl_matrix_esd <- linc(cerebellum, codingGenes = pcgenes_crbl, outlier = "esd", verbose = FALSE)
-
 # (E) plot this object
 plotlinc(crbl_matrix_esd)
 ```
@@ -81,7 +77,7 @@ plotlinc(crbl_matrix_esd)
 
 Starting from the correlation matrix, the *LINCmatrix* object, there are two functions to compute either (I) a cluster with *clusterlinc()* or (II) an analysis for a single gene. For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. Here, the query is 'MEG3 - maternally expressed 3' (its Entrez gene id is '55384'). In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes.
 
-```{r fig.width = 21, fig.height = 10, warning = FALSE, eval = TRUE}
+```{r fig.width = 21, fig.height = 10, warning = FALSE, message = FALSE, eval = TRUE}
 meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'BP', verbose = FALSE)
 plotlinc(meg3)
 ```
@@ -134,8 +130,6 @@ overlaylinc(ctx_cc, crbl_cc)
 brain_cc <- ctx_cc + crbl_cc
 plotlinc(brain_cc)
 ```
-
-
 
 ## 2.2 Advanced 3: Workflow and more about the *LINC* class
 
