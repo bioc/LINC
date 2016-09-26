@@ -29,7 +29,7 @@ require(gridExtra)
 
 ## 0.0 Introduction
 
-In the last years a class of ncRNAs were described named lincRNAs (large intergenic noncoding RNAs) as untranslated transcripts with a length of over 200 bp. [1, 2] A number of papers focused on their tissue-specific upregulation in cancer cells. [1, 3, 4] The annotation and functional classification of lincRNAs (and ncRNAs) remain challenging. Given a RNAseq or microarray experiment, one possible approach to identify candidate ncRNAs poses ``guilty by association'', a principle stating that coding and noncoding genes showing a comparable expression pattern are likely to share functionality. [5] This idea can now be easily applied on arbitrary expression matrices using this R package *LINC*.
+In the last years a class of ncRNAs were described named lincRNAs (large intergenic noncoding RNAs) as untranslated transcripts with a length of over 200 bp. [1, 2] A number of papers focused on their tissue-specific upregulation in cancer cells. [1, 3, 4] The annotation and functional classification of lincRNAs (and ncRNAs) remain challenging. Given a RNAseq or microarray experiment, one possible approach to identify candidate ncRNAs poses ``guilty by association'', a principle stating that coding and noncoding genes showing a comparable expression pattern are likely to share functionality. [5] This idea can now be easily applied on arbitrary expression matrices using this R package *LINC*. 
 The basic section will introduce the function *justlinc()* which will immediately give results. In the sections focusing on the advanced methods more complex functions are described providing control over most thresholds used in the computations. This package is intended to describe lincRNAs and their interaction to other lincRNAs plus protein-coding genes based on gene expression data.
  
 ## 1.0 Basic: Computation in one step!
@@ -38,28 +38,16 @@ The function *justlinc* is a wrapper. It requires a gene expression matrix with 
 The following commands show how *justlinc* is called. (Please note, that the large gene expression matrix named *GTEX_LIVER_CRUDE* is not provided in this Version of the package.) 
 
 ```{r fig.width = 14, fig.height = 12, warning = FALSE, message = FALSE, eval = FALSE}
-suppressWarnings(suppressMessages(require(LINC)))
-data(LIVER_EXPR)
-
-# a gene expression matrix with > 50,000 genes
-str(GTEX_LIVER_CRUDE)
-
 # 'justlinc' will search for the 10 best candidates
 justlinc(GTEX_LIVER_CRUDE)
-```
 
-The optional argument *targetGenes* can be either a gene *'biotype'* (the default value is *'lincRNA'*), a single candidate gene or a vector of genes.
-
-```{r fig.width = 9.5, fig.height = 11.5, fig.keep='first', warning = FALSE, eval = FALSE}
 # 'justlinc' called with queries
-my_lincRNAs <- c("ENSG00000224153", "ENSG00000197813",
-                 "ENSG00000179136", "ENSG00000259439",
-                 "ENSG00000267462")
-
+my_lincRNAs <- c("ENSG00000224153", "ENSG00000197813", "ENSG00000179136",
+                 "ENSG00000259439", "ENSG00000267462")
 res <- justlinc(GTEX_LIVER_CRUDE, targetGenes = my_lincRNAs)
 ```
 
-For multiple candidate genes it is assumed that they have a connection, for instance comparable co-expression pattern. This relationship is represented by the dendrogram (marked in dark red). As distance between two lincRNAs the Czekanovski dice distance [6] is considered, a measure for the number of shared interaction partners. The pathways found for the co-expressed genes are shown below the dendrogram.   
+The optional argument *targetGenes* can be either a gene *'biotype'* (the default value is *'lincRNA'*), a single candidate gene or a vector of genes. For multiple candidate genes it is assumed that they have a connection, for instance comparable co-expression pattern. As distance measure of two lincRNAs the Czekanovski dice distance [6] is used.
 
 ## 2.0 Advanced 1: correlation matrix and statistics
 
@@ -100,7 +88,7 @@ plotlinc(meg3)
 
 The *clusterlinc()* functions perfroms a correlation test (Spearman's rho by default) and clusters the candidate lincRNAs based on their interaction partners or their correlations. Enriched biological terms from gene annotation resources like *Reactome PA* and *Gene Ontology (GO)* for the cluster (multiple candidate lincRNA genes) can be identified applying *getbio()* which will call supported functions from the *clusterProfiler* package. [7 - 9] This analysis will reveal which functions, pathways or compartments are associated with the lincRNA-co-expressed genes.  
 
-```{r fig.width = 13, fig.height = 11.5, warning = FALSE, eval = TRUE}
+```{r fig.width = 13.5, fig.height = 11.5, warning = FALSE, eval = TRUE}
 # These lines of code will create a 'LINCmatrix' instance,
 # cluster the lincRNAs, derive enriched terms and plot the heatmap
 
@@ -109,8 +97,7 @@ ctx_terms <- getbio(clusterlinc(ctx_matrix, verbose = FALSE),
                     translate = 'none', annotateFrom = 'enrichPathway')
 plotlinc(ctx_terms)
 ```
-
-There are different clustering methods to choose from. *"dicedist"* is the default.
+This relationship is represented by the dendrogram (marked in dark red). As distance between two lincRNAs the Czekanovski dice distance [6] is considered, a measure for the number of shared interaction partners. There are different clustering methods to choose from. *"dicedist"* is the default.
 
 ```{r fig.width = 11.5, fig.height = 5, warning = FALSE, fig.keep='none', eval = TRUE}
 # call 'clusterlinc' with no further arguments
