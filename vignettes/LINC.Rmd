@@ -89,19 +89,34 @@ crbl_matrix_esd <- linc(cerebellum, codingGenes = pcgenes_crbl, outlier = "esd",
 plotlinc(crbl_matrix_esd)
 ```
 
-## 2.1 Advanced 2: cluster analysis or single query
+## 2.1 Advanced 2: single query or cluster analysis
 
-Starting from the correlation matrix, the *LINCmatrix* object, there are two functions to compute either (I) a cluster with *clusterlinc()* or (II) an analysis for a single query with *singlelinc()*.
-The *clusterlinc()* functions perfroms a correlation test (Spearman's rho by default) and clusters the candidate lincRNAs based on their interaction partners or their correlations.
+Starting from the correlation matrix, the *LINCmatrix* object, there are two functions to compute either (I) a cluster with *clusterlinc()* or (II) an analysis for a single gene. For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. Here, the query is 'MEG3 - maternally expressed 3' (its Entrez gene id is '55384'). In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes.
+
+```{r fig.width = 21, fig.height = 10, warning = FALSE, eval = TRUE}
+meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'BP', verbose = FALSE)
+plotlinc(meg3)
+```
+
+The *clusterlinc()* functions perfroms a correlation test (Spearman's rho by default) and clusters the candidate lincRNAs based on their interaction partners or their correlations. Enriched biological terms from gene annotation resources like *Reactome PA* and *Gene Ontology (GO)* for the cluster (multiple candidate lincRNA genes) can be identified applying *getbio()* which will call supported functions from the *clusterProfiler* package. [7 - 9] This analysis will reveal which functions, pathways or compartments are associated with the lincRNA-co-expressed genes.  
+
+```{r fig.width = 13, fig.height = 11.5, warning = FALSE, eval = TRUE}
+# These lines of code will create a 'LINCmatrix' instance,
+# cluster the lincRNAs, derive enriched terms and plot the heatmap
+
+ctx_matrix <- linc(cortex, codingGenes = pcgenes_ctx, verbose = FALSE)
+ctx_terms <- getbio(clusterlinc(ctx_matrix, verbose = FALSE),
+                    translate = 'none', annotateFrom = 'enrichPathway')
+plotlinc(ctx_terms)
+```
+
+There are different clustering methods to choose from. *"dicedist"* is the default.
 
 ```{r fig.width = 11.5, fig.height = 5, warning = FALSE, fig.keep='none', eval = TRUE}
 # call 'clusterlinc' with no further arguments
 crbl_cluster <- clusterlinc(crbl_matrix, verbose = FALSE)
 # apply the distance method "correlation instead of "dicedist"
 crbl_cluster_cor <- clusterlinc(crbl_matrix, distMethod = "correlation", verbose = FALSE)
-# comparing two distance methods
-plotlinc(crbl_cluster)
-plotlinc(crbl_cluster_cor)
 ```
 
 Another function *querycluster()* enables clustering not only across different lincRNAs in one data set, but also clustering of one lincRNA in multiple data sets. In order to distinguish between different expression matrices the function *feature* can be applied in order to add user-defined names (*customID*) and colors (*customCol*).
@@ -121,14 +136,6 @@ querycluster('647979', queryTitle = 'NORAD',
              crbl_cluster) # Cerebellum
 ```
 
-The enriched biological terms from gene annotation resources like *Reactome PA* and *Gene Ontology (GO)* for the cluster (multiple candidate lincRNA genes) can be identified applying *getbio()* which will call supported functions from the *clusterProfiler* package. [7 - 9] This analysis will reveal which functions, pathways or compartments are associated with the lincRNA-co-expressed genes.  
-
-```{r, eval = FALSE, eval = FALSE}
-# Function call for 'getbio()' and plotting:
-crbl_cc <- getbio(crbl_cluster, translate = 'none', ont = "CC")
-plotlinc(crbl_cc)
-```
-
 It can be interesting to compare two objects in terms of intersecting biological terms for shared queries. In the following example the terms for "cellular compartment" from *GO* are compared between two data sets, one representing the tissue Cortex and the other Cerebellum.
 
 ```{r fig.width = 9, fig.height = 7.5, fig.keep='first', warning = FALSE, message = FALSE, eval = TRUE}
@@ -141,12 +148,7 @@ brain_cc <- ctx_cc + crbl_cc
 plotlinc(brain_cc)
 ```
 
-For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. Here, the query is 'MEG3 - maternally expressed 3' (its Entrez gene id is '55384'). In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes.
 
-```{r fig.width = 21, fig.height = 10, warning = FALSE, eval = FALSE}
-meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'BP', verbose = FALSE)
-plotlinc(meg3)
-```
 
 ## 2.2 Advanced 3: Workflow and more about the *LINC* class
 
