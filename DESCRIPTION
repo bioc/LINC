@@ -1,7 +1,7 @@
 Package: LINC
 Type: Package
 Title: co-expression of lincRNAs and protein-coding genes
-Version: 1.1.0
+Version: 1.1.1
 Date: 2016-09-26
 Author: Manuel Goepferich, Carl Herrmann
 Maintainer: Manuel Goepferich <manuel.goepferich@gmx.de>
