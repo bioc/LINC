@@ -3,7 +3,6 @@ importFrom(grDevices, colors)
 importFrom(utils, str, tail, write.table)
 importFrom(reshape2, melt)
 importFrom(Biobase, rowMedians)
-importFrom(mygene, getGenes)
 
 import(stats)
 import(methods)
