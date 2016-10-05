@@ -1019,18 +1019,16 @@ setReplaceMethod("linCenvir", "LINCbio",
 ## create a LINCbio instance
 setGeneric(name = "getbio",
            def            = function(cluster,
-                                     translate      = "mygene",
-                                     annotateFrom   = 'enrichGO',
-                                     verbose        = TRUE,
+                                     enrichFun   = 'enrichGO',
+                                     ont = "BP",
                                      ...){
              standardGeneric("getbio")
            })
 setMethod(f     = "getbio",
           signature       = c("LINCcluster"),  
           def            = function(cluster,
-                                    translate      = "mygene",
-                                    annotateFrom   = 'enrichGO',
-                                    verbose        = TRUE,
+                                    enrichFun   = 'enrichGO',
+                                    ont = "BP",
                                     ...){                                
             ## method for a LINCcluster
             ## PREDEFINITIONs
@@ -1041,116 +1039,76 @@ setMethod(f     = "getbio",
             out_history <- history(cluster)
             
             # errors, warnings and messages  
-            errorm00 <- "LINCmatrix is empty, input corrupted"
-            errorm01 <- paste("'translate' needs to be 'mygene",
-                              " or 'none'")  
-            errorm02 <- "interpretation of 'annotateFrom' failed"
-            errorm03 <- "incorrect 'pvalCutOff' supplied"
-            warnim00 <- "call of hidden arguments"
-            warnim01 <- paste("unintended call to 'mygene' in a case",
-                              "where gene ids do not belong to the Ensembl",
-                              "gene id system")
-            warnim02 <- "translation by 'mygene' time-consuming "
-            inform01 <- paste("getbio: Package 'clusterProfiler' was",
-                              "called for gene annotation")
-            inform02 <- paste("getbio: Package 'DOSE' was",
-                              "called for gene annotation")
-            inform03 <- paste("getbio: Package 'ReactomePA' was",
-                              "called for gene annotation")
-            inform04 <- paste("getbio: Package 'mygene' was",
-                              "called for gene id translation")
+            errorm01 <- "The supplied 'enrichFun' is not supported!"
+
+            warnim01 <- paste("This enrichment function is not",
+                        "directly supported. Please,",
+                        "consider using on of c(enrichGO,",
+                        "enrichPathway, enrichDO)")
+            
+            inform01 <- paste("getbio: The function", enrichFun,
+                              "will be called.")
+            inform02 <- paste("getbio: Gene ids will be translated from", 
+                              kt_promise, "to entrez identifiers")
+
             
             ## SECTION0: INPUT CONTROL      
             
-            # interpretation of'verbose'
-            if(class(verbose) != "logical" ){
-              verbose <- TRUE
-            } else {
-              if(!any(verbose)) verbose <- FALSE
-              if(any(verbose))  verbose <- TRUE
-            }
-            if(!verbose) message <- function(x) x
-            
-            # interpretation of 'translate'
-            tl_promise <- try(match.arg(translate,
-                                        c("mygene", "xxx", "none")),
-                              silent = TRUE)
-            if(class(tl_promise) == "try-error") stop(errorm01)
-            out_history$translate <- tl_promise
-            
-            # interpretation of annotateFrom
-            cP_promise <- try(match.arg(annotateFrom,
+            # interpretation of enrichFun
+            eF_promise <- try(match.arg(enrichFun,
                                         c("enrichGO",
-                                          "enrichKEGG",
                                           "enrichPathway",
                                           "enrichDO")),
                               silent = TRUE)
-            if(class(cP_promise) == "try-error") stop(errorm02)
-            if(any(is.element(cP_promise, c("enrichGO",
-                                            "enrichKEGG",
-                                            "enrichDO",
-                                            "enrichPathway")))) {
-              #suppressPackageStartupMessages(require(clusterProfiler))  
-              #suppressPackageStartupMessages(require(org.Hs.eg.db))
-              message(inform01); store$cP_promise <- cP_promise
-              if(cP_promise == "enrichDO"){
-                #suppressPackageStartupMessages(require(DOSE))
-                message(inform02)
-              }
-              if(cP_promise == "enrichPathway"){
-                #suppressPackageStartupMessages(require(ReactomePA))  
-                message(inform03)
-              }
-            }
+            if(class(cP_promise) == "try-error") warning(warnim01)
             
-            ## !! FROM THE ENVIRONMENT
-            qy_promise <- results(cluster)[[1]]$neighbours
-            
-            ## SECTION1: GENE TRANSLATION
-            gn_promise <- identifyGenes(unlist(qy_promise))
-            
-            if(tl_promise == "mygene"){
-              if(!any(is.element(gn_promise, "ensemblgene"))){
-                warning(warnim01)
-              }
-              # suppressPackageStartupMessages(require(mygene))  
-              message(inform04); warning(warnim02)
-              transThis <- function(x){
-                query <- mygene::getGenes(x, fields = "entrezgene")
-                entrez_query <- query@listData$entrezgene
-                return(entrez_query)
-              }
-            }
-            if(tl_promise == "none"){
-              transThis <- function(x) x
-            }
-            
-            ## SECTION2: CALL TO GENE ANNOTATION
-            if(exists("cP_promise", store)){
-            
-            annotateFun <- get(cP_promise, mode = "function", envir = loadNamespace('LINC'))
-            
+            if(is.element("OrgDb", ls(history(cluster)))){
+              OrgDb <- get("OrgDb", envir = history(cluster))
+            } else {
               OrgDb <- 'org.Hs.eg.db'
-              if(cP_promise == "enrichPathway"){ OrgDb <- "human"}
+            }
+
+            ot_promise <- match.arg(ont, "MF", "BP", "CC")
+            
+            ## SECTION1: HANDLE KEYTYPES
+            ll_promise <- results(cluster)[[1]]$neighbours
+            kt_promise <- identifyGenes(unlist(ll_promise))
+            
+            if(kt_promise == "ENTREZID"){
+              cc_list <- ll_promise
+            } else {
+              message(inform02)
+              cc_list <- lapply(ll_promise, function(x){
+                bitr(x, fromType = kt_promise,
+                     OrgDb = OrgDb, toType = "ENTREZID")
+              }, organism)
+            }
+            
+          ## SECTION2: CALL TO GENE ANNOTATION
+            
+          if(is.element("OrgDb", names(formals(eF_promise)))){
+           bio <- compareCluster(cc_list, fun = eF_promise,
+                                 OrgDb = OrgDb, ont = ot_promise, ...)
+          }  
+            
+          if(is.element("organism", names(formals(eF_promise)))){
+            if(OrgDb == 'org.Hs.eg.db'){
+              OrgDb <- "human"
+            }
+           bio <- compareCluster(cc_list, fun = eF_promise, organism = og_promise, ...)
+          }    
+            
+          if(!is.element("organism", names(formals(eF_promise)))){
+           bio <- compareCluster(cc_list, fun = eF_promise, ...)
+          }    
+          
+          if(!exists("bio")) stop(errorm0)
               
-              out_bio_terms <- lapply(qy_promise,
-                                      function(x){ entrez_query <- transThis(x)
-                                      cP_result   <- annotateFun(gene = entrez_query, OrgDb, ...)
-                                      if(class(cP_result) == "enrichResult"){
-                                        qvalues     <- slot(cP_result, "result")$qvalue 
-                                        bio_terms   <- slot(cP_result, "result")$Description
-                                        query_entry <- list(qvalues, bio_terms)
-                                      } else {
-                                        query_entry <- list(NA, NA)
-                                      }
-                                      return(query_entry)
-                                      })  
-            } # clusterProfiler 
             
             ## SECTION3: PREPARATION OF OUTPUT
             #out_linc             <- LINCbio()
             out_linc             <- new("LINCbio")
-            results(out_linc)     <- list(bio = out_bio_terms)  
+            results(out_linc)     <- bio  
             assignment(out_linc)  <- assignment(cluster)
             correlation(out_linc) <- correlation(cluster)
             express(out_linc)  <- express(cluster)
@@ -1162,7 +1120,6 @@ setMethod(f     = "getbio",
             linCenvir(out_linc)   <- out_linCenvir
             return(out_linc)
           }) # method end
-
 
 ## PLOTTING METHOD
 setGeneric(name = "plotlinc",
@@ -1303,7 +1260,6 @@ setMethod(f   = "plotlinc",
             
           })
 
-
 ## plot a cluster without bio_terms
 setMethod(f   = "plotlinc",
           signature = c("LINCcluster",
@@ -1316,49 +1272,50 @@ setMethod(f   = "plotlinc",
             ## method for a LINCcluster object            
             ## PREDEFINITIONs
             validObject(input)         
-            #  suppressWarnings(suppressPackageStartupMessages(
-            # require(ggtree)))          
-            
+   
             cluster  <- results(linCenvir(input)$cluster)[[1]]
             
             ## SECTION0: INPUT CONTROL  
-            # check for a cluster
-            
-            #+ to be added          
-            
+     
             # plot the cluster
             tree <- ggtree(cluster, colour = "firebrick") +
               coord_flip() + scale_x_reverse()
-            tree <- tree + geom_tiplab(size = 3.5, angle = 90,
-                                       colour = "firebrick", hjust = 1)
+            tree <- tree + geom_tiplab(size = 4, angle = -90,
+                                       colour = "deeppink4",
+                                       hjust = 0, vjust = 0)
             
-            # derive neighbour genes for different CutOffs
-            cortest_matrix  <- correlation(linCenvir(input)$cluster)[[2]]
-            pval_default <- c(1e-25, 1e-10, 1e-5, 1e-4, 1e-3, 1e-2)
-            nrow <- length(pval_default)
-            msize <- dim(cortest_matrix); mextn <- nrow  * msize[2]
-            fill_matrix <- matrix(rep(0, mextn), ncol = msize[2],
-                                  nrow = nrow )
-            
-            for(i in seq_len(nrow) ){
-              ng_derived <- deriveCluster(cortest_matrix,
-                                           alpha = pval_default[i])
-              fill_matrix[i,] <- unlist(lapply(ng_derived, length))
-            }
-            
-            
-            # convert this matrix for plotting
-            plot_df <- as.data.frame(t(fill_matrix))
-            rownames(plot_df) <- colnames(cortest_matrix )
-            colnames(plot_df) <-  as.character(pval_default)
+            plot_matrix <- as.matrix(unlist(lapply(
+              cluster$neighbours, length)))
+            plot_df <- as.data.frame(plot_matrix)
             
             clust_heat <- gheatmap(tree, plot_df, offset = 0.1,
-                                   width = 0.5, colnames = TRUE,
-                                   low = "white", high = "violetred4",
-                                   colnames_position = "top")
-
-            hs_promise <- history(linCenvir(input)$cluster)
-
+                                   width = 0.2, colnames = FALSE,
+                                   colnames_position = "top",
+                                   low = "white", high = "white") +
+              guides(fill = FALSE) +
+              ggtitle("DENDROGRAM OF QUERIES") +
+              theme(plot.title = element_text(
+                face = "bold", color = "firebrick4"))
+            
+            
+            # plot p-value distributions of correlations
+            
+            cortested <- correlation(input)[2]$cortest
+            log10pval <- -log10(as.vector(cortested))
+            df_cor <- data.frame(PVALUE = log10pval)
+            gg_cor <- ggplot(df_cor, aes(PVALUE), environment = environment()) +
+              geom_histogram(binwidth = 0.02 ) +  #bins = 100,
+              #size = 1, fill = c(rep("grey", 95), rep("dodgerblue3", 6)))
+              theme(
+              panel.border = element_rect(color = "grey", fill = NA),   
+              panel.background = element_blank()) +
+              xlim(-0.2, 16) + #scale_x_continuous(breaks = 0.01 ) +
+              geom_vline(xintercept = 0, colour = "firebrick", linetype = 'dashed') +
+              geom_vline(xintercept = 1.3, colour = "dodgerblue3") + 
+              ggtitle("P-VALUES FROM CORRELATION TEST (units of -log10(p-value))") +
+              theme(plot.title = element_text(face = "bold",
+                                              color = "violetred4"))
+            
             # get and plot the statistical parameters
             get_this <- c("distMethod", "clustMethod", 
                           "corMethod",  "cor_use", "pvalCutOff",
@@ -1397,25 +1354,24 @@ setMethod(f   = "plotlinc",
                             "AND COEXPRESSED GENES")) +
               theme(plot.title = element_text(face = "bold"))
             
-            #  suppressPackageStartupMessages(require(grid))  
-            #  suppressPackageStartupMessages(require(png))
             stclust_img <- readPNG(system.file("extdata", "stclust_img.png",
                                                package ="LINC"))
-            # stclust_img <- readPNG("stclust_img.png")
             stclust_plot <- rasterGrob(stclust_img, interpolate = TRUE)
             
-            # suppressPackageStartupMessages(require(gridExtra))     
-            # left_side <- suppressMessages(suppressWarnings(arrangeGrob(
-            #  gg_cor, gg_box , gg_freq, ncol = 1)))
             customid <- ""
             if(exists("customID", envir = history(input))){
               customid <- history(input)$customID
             } 
             
-            right_side <- arrangeGrob(stclust_plot, clust_para_plot, ncol = 1, bottom = customid)
-            
-            grid.arrange(clust_heat, right_side,  nrow = 1 )
-            
+            if(returnDat){
+              return(results(input))
+            } else {
+
+              final_plot <- grid.arrange(gg_cor, stclust_plot,
+                                         clust_heat, clust_para_plot,  
+                                         nrow = 2)
+              return(invisible(final_plot))  
+            }
           }) # end of method  
 
 setMethod(f   = "plotlinc",
@@ -1539,129 +1495,78 @@ setMethod(f   = "plotlinc",
             ## method for a LINCbio object            
             ## PREDEFINITIONs
             validObject(input)        
-            # suppressWarnings(suppressPackageStartupMessages(
-            # require(ggtree)))          
-            
             cluster  <- results(linCenvir(input)$cluster)[[1]]
             bio_list <- results(linCenvir(input)$bio)[[1]]
             
             ## SECTION0: INPUT CONTROL  
-            # check for a cluster
+            returnDat <- inlogical(returnDat, direct = FALSE)
+            q_list <- getlinc(input, subject = "queries")
+            q_express <- ep_promise[q_list, ]
+
+            # create a box plot
+            df_boxplot  <- suppressMessages(reshape2::melt(q_express))
+            df_boxplot$Var1 <- as.factor(df_boxplot$Var1)
             
-            #+ to be added          
+            names(df_boxplot) <- c("QUERIES", NA, "GENE_EXPRESSION")
+            gg_box <- ggplot(df_boxplot,
+                             aes(QUERIES, GENE_EXPRESSION),
+                             environment = environment()) +
+            geom_boxplot(outlier.color = "firebrick",
+                         colour = "dodgerblue3") +
+              theme(panel.border = element_rect(color = "grey",
+              fill = NA), panel.background = element_blank()) +
+              ggtitle("EXPRESSION OF QUERIES") +
+              theme(plot.title = element_text(face = "bold",
+                                              color = "steelblue4"),
+                    axis.text.x = element_text(color = "deeppink4",
+                                               angle = -90, hjust = 0,
+                                               vjust = 0, size = 12),
+                    axis.title.x = element_blank())
             
             # plot the cluster
             tree <- ggtree(cluster, colour = "firebrick") +
               coord_flip() + scale_x_reverse()
-            tree <- tree + geom_tiplab(size = 3.5, angle = 90,
-                                       colour = "firebrick", hjust = 1)
+            tree <- tree + geom_tiplab(size = 4, angle = -90,
+                                       colour = "deeppink4",
+                                       hjust = 0, vjust = 0)
             
-            # prepare biological terms for plotting
-            # preparation of a matrix
-            
-            # MAKE THIS ROBUST
-            term_ext <- 1
-            while(term_ext < 20){
-              term_ext <- (term_ext + 1)
-              raw_names <- names(bio_list)
-              term_crude <- lapply(bio_list, function(x, term_ext){
-                x[[2]][seq_len(term_ext)] }, term_ext)
-              term_unique <- unique(unlist(term_crude))
-              if(length(term_unique) > 20) break
-            } 
-            term_unique[is.na(term_unique)] <- "NA"
-            m <- length(raw_names); n <- length(term_unique)
-            plot_matrix <- matrix(rep(0, (m*n)), ncol = n, nrow = m )
-            colnames(plot_matrix) <- term_unique
-            rownames(plot_matrix) <- raw_names
-            
-            # now fill matrix with biological terms
-            for(query in seq_len(m)){
-              if(length(bio_list[[query]][[2]]) > 0 &&
-                 is.character(bio_list[[query]][[2]]) &&
-                 is.numeric(bio_list[[query]][[1]])){
-                
-                bio_query <- bio_list[[query]][[2]]
-                pvalues <- (-log10(bio_list[[query]][[1]]))
-                row_entry <- vapply(colnames(plot_matrix),
-                                    function(x, pvalues){
-                                      if(any(x == bio_query)){
-                                        pvalues[x == bio_query][1]
-                                      } else {
-                                        return(0)   
-                                      }
-                                    }, 0, pvalues)
-                row_entry[row_entry > 16] <- 16
-                plot_matrix[query,] <- row_entry
-              }
-            }
-            
-            # melt this matrix for plotting
-
-            # convert this matrix for plotting
-            term_assign <- seq_len(length(term_unique))
-            colnames(plot_matrix) <- paste(term_assign, "          ")
-            #plot_matrix > 16 <- 16 
+            plot_matrix <- as.matrix(unlist(lapply(
+                           cluster$neighbours, length)))
             plot_df <- as.data.frame(plot_matrix)
-            
-            # return data or return the plot
-            if(returnDat){
-              colnames(plot_df) <- term_unique
-              final_dat <- list(cluster = cluster, annotation = plot_df)
-              return(final_dat) 
-            } else { 
-              clust_heat <- gheatmap(tree, plot_df, offset = 0.1,
-                                     width = 0.5, colnames = TRUE,
-                                     low = "white", high = "dodgerblue3",
-                                     colnames_position = "top")
-              
-              #grid.arrange(clust_heat, clust_heat, ncol= 0, nrow=0)
-              
-              
-              # additional plot for term assignments
-              bio_assignment <- mapply(function(x,y){ paste(x,y) },
-                                       x = term_assign, y = term_unique)
-              df_assign <- data.frame(bio_assignment, y = -term_assign,
-                                      x = rep(0, length(term_unique)))
-              
-              pty_pl <- (ggplot(df_assign, aes(x,y), environment = environment()) +
-                           geom_point(color = "white") + xlim(0, 1) +
-                           theme(axis.line = element_line(colour =
-                                                            "white"), panel.grid.major = element_blank(),
-                                 panel.grid.minor = element_blank(),
-                                 panel.border = element_blank(),   
-                                 panel.background = element_blank()) +
-                           theme(axis.title.y = element_text(color =
-                                                               "white")) + theme(axis.title.x = element_text(
-                                                                 color = "white")) + theme(axis.text.x = 
-                                                                                             element_text(color = "white")) + theme(
-                                                                                               axis.text.y = element_text(color = "white")))
-              
-              bio_assign_plot <- pty_pl + geom_text(aes(label = 
-                                                          bio_assignment),hjust=0, vjust=0,
-                                                    size = 4, colour = "grey18") 
-              
-              # additional plot for title and explanations  
-              # suppressPackageStartupMessages(require(grid))  
-              # suppressPackageStartupMessages(require(png))
-              
+
+            clust_heat <- gheatmap(tree, plot_df, offset = 0.1,
+                                   width = 0.2, colnames = FALSE,
+                                   colnames_position = "top",
+                                   low = "white", high = "white") +
+                                   guides(fill = FALSE) +
+                                   ggtitle("DENDROGRAM OF QUERIES") +
+                                   theme(plot.title = element_text(
+                                   face = "bold", color = "firebrick4"))
+
               clust_img <- readPNG(system.file("extdata", "clust_img.png",
                                                package ="LINC"))
-              #clust_img <- readPNG("clust_img.png")
               clust_plot <- rasterGrob(clust_img, interpolate = TRUE)
               
-              
+              # plot the biological terms
+              term_cluster <- clusterProfiler::plot(bio_list,
+                                               chowCategory = 4) +
+              theme(axis.text.x = element_text(angle = -90, hjust = 0,
+                                               vjust = 0, size = 12,
+                                               color = "deeppink4"))
+
               # assembly of the final plot
-              # suppressPackageStartupMessages(require(gridExtra))    
               customid <- ""
               if(exists("customID", envir = history(input))){
                 customid <- history(input)$customID
               } 
               
-              right_side <- arrangeGrob(clust_plot, bio_assign_plot,
-                                        ncol = 1, bottom = customid)
-              final_plot <- grid.arrange(clust_heat, right_side,
-                                         nrow = 1)
+              if(returnDat){
+                return(bio_list)
+              } else {
+              top_panel <- arrangeGrob(clust_plot, clust_heat, gg_box,
+                                        ncol = 3, bottom = customid)
+              final_plot <- grid.arrange(top_panel, term_cluster, 
+                                         nrow = 2)
               return(invisible(final_plot))  
             }
           }) # method end  
