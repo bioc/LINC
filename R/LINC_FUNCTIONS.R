@@ -79,6 +79,7 @@ splot_10 <- NA; splot_2 <- NA; splot_3 <- NA
 splot_4 <- NA; splot_5 <- NA; splot_6 <- NA
 splot_7 <- NA; splot_8 <- NA; splot_9 <- NA
 values <- NA; x <- NA; y <- NA
+GENE_EXPRESSION <- NA; PVALUE <- NA; QUERIES <- NA
 
 # HELPING FUNCTION "inlogical"
 inlogical <- function(lg_promise, direct){
