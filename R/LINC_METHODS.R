@@ -1046,10 +1046,10 @@ setMethod(f     = "getbio",
                         "consider using on of c(enrichGO,",
                         "enrichPathway, enrichDO)")
             
-            inform01 <- paste("getbio: The function", enrichFun,
-                              "will be called.")
-            inform02 <- paste("getbio: Gene ids will be translated from", 
-                              kt_promise, "to entrez identifiers")
+            inform01 <- quote(paste("getbio: The function", enrichFun,
+                              "will be called."))
+            inform02 <- quote(paste("getbio: Gene ids will be translated from", 
+                              kt_promise, "to entrez identifiers"))
 
             
             ## SECTION0: INPUT CONTROL      
@@ -1061,7 +1061,8 @@ setMethod(f     = "getbio",
                                           "enrichDO")),
                               silent = TRUE)
             if(class(cP_promise) == "try-error") warning(warnim01)
-            
+            message(eval(inform01))
+                      
             if(is.element("OrgDb", ls(history(cluster)))){
               OrgDb <- get("OrgDb", envir = history(cluster))
             } else {
@@ -1077,7 +1078,7 @@ setMethod(f     = "getbio",
             if(kt_promise == "ENTREZID"){
               cc_list <- ll_promise
             } else {
-              message(inform02)
+              message(eval(inform02))
               cc_list <- lapply(ll_promise, function(x){
                 bitr(x, fromType = kt_promise,
                      OrgDb = OrgDb, toType = "ENTREZID")
