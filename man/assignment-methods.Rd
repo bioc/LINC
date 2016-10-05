@@ -1,5 +1,6 @@
 \name{assignment-methods}
 \docType{methods}
+\alias{assignment}
 \alias{assignment-methods}
 \alias{assignment,LINCbio-method}
 \alias{assignment,LINCcluster-method}
