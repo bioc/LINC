@@ -1799,8 +1799,8 @@ setGeneric(name = "singlelinc",
                            threshold = 0.05,
                            underth = TRUE,
                            coExprCut = NULL,
-                           handleGeneIds = TRUE,
-                           annotateFrom  = 'enrichGO',
+                           enrichFun  = 'enrichGO',
+                           ont = 'BP',
                            verbose = TRUE, ...){
              standardGeneric("singlelinc")
            })
@@ -1815,7 +1815,7 @@ setMethod(f = "singlelinc",
                                  threshold = 0.05,
                                  underth = FALSE,
                                  coExprCut = NULL,
-                                 annotateFrom  = 'enrichGO',
+                                 enrichFun  = 'enrichGO',
                                  ont = 'BP',
                                  verbose = TRUE, ...){
             ## method for a LINCmatrix as input
