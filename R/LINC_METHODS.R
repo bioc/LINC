@@ -1099,11 +1099,11 @@ setMethod(f     = "getbio",
            bio <- compareCluster(cc_list, fun = eF_promise, organism = og_promise, ...)
           }    
             
-          if(!is.element("organism", names(formals(eF_promise)))){
+          if(!any(is.element(c("OrgDb", "organism"), names(formals(eF_promise))))){
            bio <- compareCluster(cc_list, fun = eF_promise, ...)
           }    
           
-          if(!exists("bio")) stop(errorm0)
+          if(!exists("bio")) stop(errorm01)
               
             
             ## SECTION3: PREPARATION OF OUTPUT
