@@ -1815,8 +1815,8 @@ setMethod(f = "singlelinc",
                                  threshold = 0.05,
                                  underth = FALSE,
                                  coExprCut = NULL,
-                                 handleGeneIds = TRUE,
                                  annotateFrom  = 'enrichGO',
+                                 ont = 'BP',
                                  verbose = TRUE, ...){
             ## method for a LINCmatrix as input
             ## PREDEFINITIONs
@@ -1838,18 +1838,21 @@ setMethod(f = "singlelinc",
             warnim03 <- paste("'testFun' is not 'stats::cor.test'",
                               "and does not have formal arguments",
                               "'x', 'y', 'use' and 'method'")
-            warnim04 <- "input not as Entrezgenes and not translated"
+            warnim04 <- paste("This enrichment function is not",
+                        "directly supported. Please,",
+                        "consider using on of c(enrichGO,",
+                        "enrichPathway, enrichDO)")
             inform01 <- paste("singlelinc: no test conducted, genes",
                               "selected based on correlation values")
             inform02 <- paste("singlelinc: the number of neighbour",
                               "genes was reduced by 'coExprCut'")
             inform03 <- quote(paste("singlelinc: co-expression",
-                                    "analysis yielded", ql_promise, "genes"))                              
-            inform04 <- paste("singlelinc: Package 'clusterProfiler' was",
-                              "called for gene annotation")
-            inform05 <- paste("singlelinc: compatibility of gene ids",
-                              "will be checked")
-            
+                                    "analysis yielded", ql_promise, "genes"))                                       
+            inform04 <- paste("getbio: The function", enrichFun,
+                              "will be called.")
+            inform05 <- paste("getbio: Gene ids will be translated from", 
+                              kt_promise, "to entrez identifiers")       
+                    
             # get information from 'linc' 
             validObject(input)  
             
@@ -1868,7 +1871,6 @@ setMethod(f = "singlelinc",
             # and 'verbose'
             onlycor <- inlogical(onlycor, direct = FALSE)
             underth <- inlogical(underth, direct = TRUE)
-            handleGeneIds <- inlogical(handleGeneIds, direct = TRUE)
             verbose <- inlogical(verbose, direct = TRUE)
             if(!verbose) message <- function(x) x
             
@@ -1916,24 +1918,7 @@ setMethod(f = "singlelinc",
             found <- try(any(is.element(aq_promise, qy_promise)))
             if(class(found) == "try-error")  stop(errorm06)
             if(!found) stop(errorm06)
-            
-            # interpretation of annotateFrom
-            cP_promise <- try(match.arg(annotateFrom,
-                                        c("enrichGO",
-                                          "enrichKEGG",
-                                          "enrichPathway",
-                                          "enrichDO")))
-            if(class(cP_promise) == "try-error") stop(errorm02)
-            if(any(is.element(cP_promise, c("enrichGO",
-                                            "enrichKEGG",
-                                            "enrichPathway",
-                                            "enrichDO")))) {
-              #suppressPackageStartupMessages(require(clusterProfiler))  
-              #suppressPackageStartupMessages(require(org.Hs.eg.db))
-              message(inform04)
-              annotateFun  <- get(cP_promise, mode = "function", envir = loadNamespace('LINC'))
-            }
-            
+                        
             ## SECTION1: CO-EXPRESSION AND GENE SELECTION
             # argument contradiction
             if(test_call && onlycor){
@@ -1989,29 +1974,54 @@ setMethod(f = "singlelinc",
             }
             
             ## SECTION2: GENE TRANSLATION
-            gn_promise <- identifyGenes(qg_promise)
-            # issue: translate to other gene ids
-            if(handleGeneIds == TRUE){
+            eF_promise <- try(match.arg(enrichFun,
+                                       c("enrichGO",
+                                         "enrichPathway",
+                                         "enrichDO")),
+                                          silent = TRUE)
+            if(class(cP_promise) == "try-error") warning(warnim01)
+            message(inform04)
+            eF_promise  <- get(eF_promise, mode = "function",
+                               envir = loadNamespace('LINC'))
+            
+                      
+            if(is.element("OrgDb", ls(history(cluster)))){
+              OrgDb <- get("OrgDb", envir = history(cluster))
+            } else {
+              OrgDb <- 'org.Hs.eg.db'
+            }          
+                      
+            ot_promise <- match.arg(ont, "MF", "BP", "CC")
+            kt_promise <- identifyGenes(unlist(ll_promise))
+            
+            if(kt_promise == "ENTREZID"){
+              entrez_query <- qg_promise
+            } else {
               message(inform05)
-              transThis <- function(x){
-                query <- mygene::getGenes(x, fields = "entrezgene")
-                entrez_query <- query@listData$entrezgene
-                return(entrez_query)
-              }
-            }
-            if(handleGeneIds == FALSE){
-              if(!any(is.element(gn_promise, "entrezgene"))){
-                warning(warnim04)
-              }
-              transThis <- function(x) x
+              entrez_query <- bitr(qg_promise, fromType = kt_promise,
+                     OrgDb = OrgDb, toType = "ENTREZID")
             }
             
-            OrgDb <- 'org.Hs.eg.db'
-            if(cP_promise == "enrichPathway"){ OrgDb <- "human"}
-            ## SECTION3: CALL TO GENE ANNOTATION
-            entrez_query <- transThis(qg_promise)  
-            cP_result    <- annotateFun(gene = entrez_query, OrgDb, ...)
-            if(class(cP_result) == "enrichResult"){
+          ## SECTION2: CALL TO GENE ANNOTATION
+            
+          if(is.element("OrgDb", names(formals(eF_promise)))){
+           bio <- eF_promise(entrez_query,
+                             OrgDb = OrgDb, ont = ot_promise, ...)
+          }  
+            
+          if(is.element("organism", names(formals(eF_promise)))){
+            if(OrgDb == 'org.Hs.eg.db'){
+              OrgDb <- "human"
+            }
+           bio <- eF_promise(entrez_query, organism = og_promise, ...)
+          }    
+            
+          if(!is.element("organism", names(formals(eF_promise)))){
+           bio <- eF_promise(entrez_query, ...)
+          }    
+          
+          if(!exists("bio")) stop("The supplied 'enrichFun' is not supported!")          
+          if(class(bio) == "enrichResult"){
               qvalues     <- slot(cP_result, "result")$qvalue
               bio_terms   <- slot(cP_result, "result")$Description
               out_query   <- list(qvalues, bio_terms)
