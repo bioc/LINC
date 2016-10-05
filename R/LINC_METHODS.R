@@ -1627,7 +1627,7 @@ setMethod(f   = "plotlinc",
             
             qy_gg_ns <- ggplot(expr_df, environment = environment()) + geom_bar(aes(x = SAMPLES, 
                                                        y = EXPRESSION), stat = "identity", colour =
-                                                     "firebrick", fill = "red", alpha = 0.1 ) +
+                                                     "firebrick", fill = "blue", alpha = 0.1 ) +
               theme(panel.background = element_blank(),
                     panel.border = element_rect(color = "grey",
                                                 fill = NA))
@@ -1635,7 +1635,7 @@ setMethod(f   = "plotlinc",
             cor1 <-  try(correlation(input)[[1]][spg_promise[2],
                                                 spg_promise[1]], silent = TRUE)
             if(class(cor1) == "try-error") cor1 <- NA
-            plot1 <- qy_gg + geom_point(aes(x =QUERY, y = SUBJECT_1),
+            plot1 <- qy_gg + geom_point(aes(x = QUERY, y = SUBJECT_1),
                                         stat = "identity", colour = "firebrick4", alpha = 0.9) + ggtitle(paste(
                                           spg_promise[1], "vs", spg_promise[2],
                                           "(correlation =", round(cor1, 3), ")" )) +
@@ -1697,7 +1697,7 @@ setMethod(f   = "plotlinc",
               cor5 <-  try(correlation(input)[[1]][spg_promise[6],
                                                   spg_promise[1]], silent = TRUE)
               if(class(cor5) == "try-error") cor5 <- NA
-              plot5 <- qy_gg + geom_point(aes(x =QUERY, y = SUBJECT_5),
+              plot5 <- qy_gg + geom_point(aes(x = QUERY, y = SUBJECT_5),
                                           stat = "identity", colour = "firebrick4", alpha = 0.9) + ggtitle(paste(
                                             spg_promise[1], "vs", spg_promise[6],
                                             "(correlation =", round(cor5, 3), ")" )) +
