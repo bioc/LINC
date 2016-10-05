@@ -60,11 +60,13 @@ changeOrgDb <- function(object, OrgDb){
                             "zebrafish"))            
   
   if(is.element("history", slotNames(object))){
-    history(object) <- og_promise
+    history(object)$OrgDb <- og_promise
   } else {
     stop("Cannot change OrgDb for this object!")
-  }   
+  }
+  return(object)
 }
+
 
 # set a global binding for variables in ggplot functions
 ASSIGNMENT <- NA; CORRELATION <- NA; EXPRESSION <- NA;
