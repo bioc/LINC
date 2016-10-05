@@ -1272,7 +1272,7 @@ setMethod(f   = "plotlinc",
             ## method for a LINCcluster object            
             ## PREDEFINITIONs
             validObject(input)         
-   
+            hs_promise <-  history(linCenvir(input)$cluster)
             cluster  <- results(linCenvir(input)$cluster)[[1]]
             
             ## SECTION0: INPUT CONTROL  
