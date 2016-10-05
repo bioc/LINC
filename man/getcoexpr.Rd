@@ -20,7 +20,7 @@ a \code{'LINCcluster'} or \code{'LINCsingle'} object
   \item{query}{
 for a \code{'LINCcluster'} the name of the query gene
 }
-   \item{query}{
+   \item{keyType}{
 The \code{'keyType'} (gene system) for the output.
 }
 }
