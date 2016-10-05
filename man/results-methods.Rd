@@ -33,6 +33,7 @@ results slot
   \item{x}{
  a \code{'LINC'} object, for instance \code{LINCmatrix}
 }
+}
 
 \value{
 the respective substructure or information
