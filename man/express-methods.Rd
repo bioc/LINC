@@ -1,5 +1,6 @@
 \name{express-methods}
 \docType{methods}
+\alias{express}
 \alias{express-methods}
 \alias{express,LINCbio-method}
 \alias{express,LINCcluster-method}
