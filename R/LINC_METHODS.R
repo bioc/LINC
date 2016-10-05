@@ -2021,8 +2021,8 @@ setMethod(f = "singlelinc",
           
           if(!exists("bio")) stop("The supplied 'enrichFun' is not supported!")          
           if(class(bio) == "enrichResult"){
-              qvalues     <- slot(cP_result, "result")$qvalue
-              bio_terms   <- slot(cP_result, "result")$Description
+              qvalues     <- slot(bio, "result")$qvalue
+              bio_terms   <- slot(bio, "result")$Description
               out_query   <- list(qvalues, bio_terms)
             } else {
               out_query <- list(NA, NA)
