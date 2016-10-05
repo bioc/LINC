@@ -23,7 +23,7 @@ suppressMessages(require(LINC))
 data(BRAIN_EXPR)
 ```
 
-# [Content](_)
+# Content
  * 0.0 Introduction
  * 1.0 Basic: Input Preparation and Prediction
  * 2.0 Advanced 1: Input Matrix and Statistics
@@ -130,7 +130,7 @@ getcoexpr(crbl_cluster, query = "55384", keyType = 'SYMBOL')[1:5]
 
 ```
 
-Moreover, one could focus the analysis on a single query like MEG3. For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes. For multiple queries the workflow as sequence of function calls would be *linc()* -> *clusterlinc()* -> *getbio()* -> *plotlinc()* ... and *linc()* -> *singlelinc()* -> *plotlinc()* for a single query. If there are more than > 100 queries (lincRNA genes) in the matrix it will be beneficial to subset the expression matrix as mentioned before.
+Moreover, one could focus the analysis on a single query like MEG3. For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes. For multiple queries the workflow as sequence of function calls would be *linc()* -> *clusterlinc()* -> *getbio()* -> *plotlinc()* ... and *linc()* -> *singlelinc()* -> *plotlinc()* for a single query. If there are more than > 100 queries (lincRNA genes) in the matrix it will be beneficial to subset the expression matrix as mentioned before. Since the applied enrichment functions like *enrichPathway* expects Entrez ids the protein-coding genes should use this gene system. Identifiers of another gene systems will be translated to Entrez.
 
 ```{r fig.width = 23, fig.height = 10, warning = FALSE, message = FALSE, eval = TRUE}
 meg3 <- singlelinc(crbl_matrix, query = "55384",
@@ -140,7 +140,6 @@ plotlinc(meg3)
 ```
 
 This yields 22 genes which have a correlation of > 0.5 to the expression profile of MEG3. As for the cluster analysis 'mRNA Splicing' is again significant.
-
 
 # 2.0 Advanced 1: Input Matrix and Statistics
 
@@ -292,7 +291,7 @@ neat1 <- querycluster('283131', queryTitle = 'NEAT1',
 
 grid.arrange(norad, neat1, ncol = 2)
 ```
-
+The colors in the heatmap indicate the number of shared interaction partners.
 There is so far no direct function call to depict expression patterns of one lincRNA in multiple datasets. However, this task can be performed in few steps using *lapply()*, *getcoexpr()* and the *clusterProfiler* [6] package.
 
 ```{r eval = FALSE}
