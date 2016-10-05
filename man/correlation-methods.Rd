@@ -1,5 +1,6 @@
 \name{correlation-methods}
 \docType{methods}
+\alias{correlation}
 \alias{correlation-methods}
 \alias{correlation,LINCbio-method}
 \alias{correlation,LINCcluster-method}
