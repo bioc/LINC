@@ -1848,9 +1848,9 @@ setMethod(f = "singlelinc",
                               "genes was reduced by 'coExprCut'")
             inform03 <- quote(paste("singlelinc: co-expression",
                                     "analysis yielded", ql_promise, "genes"))                                       
-            inform04 <- quote(paste("getbio: The function", enrichFun,
+            inform04 <- quote(paste("singlelinc: The function", enrichFun,
                               "will be called."))
-            inform05 <- quote(paste("getbio: Gene ids will be translated from", 
+            inform05 <- quote(paste("singlelinc: Gene ids will be translated from", 
                               kt_promise, "to entrez identifiers"))       
                     
             # get information from 'linc' 
@@ -2005,7 +2005,7 @@ setMethod(f = "singlelinc",
             
           if(is.element("OrgDb", names(formals(eF_promise)))){
            bio <- eF_promise(entrez_query,
-                             OrgDb, ont = ot_promise, ...)
+                             OrgDb = OrgDb, ont = ot_promise, ...)
           }  
             
           if(is.element("organism", names(formals(eF_promise)))){
