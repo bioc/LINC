@@ -1551,7 +1551,7 @@ setMethod(f   = "plotlinc",
               
               # plot the biological terms
               term_cluster <- clusterProfiler::plot(bio_list,
-                                               chowCategory = 4) +
+                                               schowCategory = 4) +
               theme(axis.text.x = element_text(angle = -90, hjust = 0,
                                                vjust = 0, size = 12,
                                                color = "deeppink4"))
