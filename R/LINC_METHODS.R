@@ -1097,7 +1097,7 @@ setMethod(f     = "getbio",
             if(OrgDb == 'org.Hs.eg.db'){
               OrgDb <- "human"
             }
-           bio <- compareCluster(cc_list, fun = eF_promise, organism = og_promise, ...)
+           bio <- compareCluster(cc_list, fun = eF_promise, organism = OrgDb, ...)
           }    
             
           if(!any(is.element(c("OrgDb", "organism"), names(formals(eF_promise))))){
