@@ -26,7 +26,6 @@ Class \code{"\linkS4class{LINCmatrix}"}, directly.
 }
 \section{Methods}{
   \describe{
-    \item{+}{\code{signature(e1 = "LINCbio", e2 = "LINCbio")}: ... }
     \item{+}{\code{signature(e1 = "LINCbio", e2 = "LINCfeature")}: ... }
     \item{linctable}{\code{signature(file_name = "character", input = "LINCbio")}: ... }
     \item{overlaylinc}{\code{signature(input1 = "LINCbio", input2 = "LINCbio")}: ... }
