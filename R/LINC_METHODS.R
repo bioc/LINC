@@ -2169,35 +2169,6 @@ setMethod(f = '+',
             callNextMethod()
           })
 
-## intersect methods
-setMethod(f = '+',
-          signature = c("LINCbio", "LINCbio"),   
-          definition  = function(e1, e2){
-            # add the costum id to the history slot  
-            
-            errorm01 <- "No match found for these objects"          
-            
-            b1_promise <- results(linCenvir(e1)$bio)[[1]]
-            b2_promise <- results(linCenvir(e2)$bio)[[1]]
-            query_both <- intersect(names(b1_promise),
-                                    names(b2_promise))
-            if(length(query_both) == 0) stop(errorm01)
-            b1_index <- match(query_both, names(b1_promise))
-            b2_index <- match(query_both, names(b2_promise))
-            
-            bio_intersect <- mapply(function(x, y){
-              bio_terms <- unlist(intersect(x[[2]], y[[2]]))
-              qvalues <- unlist(x[[1]][ match(bio_terms, x[[2]]) ])
-              out <- list(qvalues, bio_terms)
-              query_entry <- list(out)
-              return(query_entry)
-            } , x = b1_promise[b1_index],
-            y = b2_promise[b2_index])
-            
-            results(e1) <- bio_intersect
-            return(e1)
-          })
-
 setGeneric(name = "overlaylinc",
            def = function(
              input1,
