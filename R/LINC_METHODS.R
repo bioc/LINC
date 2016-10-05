@@ -1498,6 +1498,7 @@ setMethod(f   = "plotlinc",
             validObject(input)        
             cluster  <- results(linCenvir(input)$cluster)[[1]]
             bio_list <- results(linCenvir(input)$bio)[[1]]
+            ep_promise <- express(linCenvir(input)$cluster)
             
             ## SECTION0: INPUT CONTROL  
             returnDat <- inlogical(returnDat, direct = FALSE)
