@@ -53,10 +53,7 @@ data(BRAIN_EXPR)
 getlinc(crbl_cluster, subject = "geneSystem")
 getlinc(crbl_cluster, subject = "queries")
 getlinc(crbl_cluster, subject = "customID")
-str(crbl_matrix@assignment) # protein-coding genes are stored in the 'assignment' slot
 
-# write to a table
-#linctable(file_name = "crbl_co_expr", input = crbl_cluster)
 }  
 \keyword{ ~getlinc }
 
