@@ -1069,7 +1069,7 @@ setMethod(f     = "getbio",
               OrgDb <- 'org.Hs.eg.db'
             }
 
-            ot_promise <- match.arg(ont, "MF", "BP", "CC")
+            ot_promise <- match.arg(ont, c("MF", "BP", "CC"))
             
             ## SECTION1: HANDLE KEYTYPES
             ll_promise <- results(cluster)[[1]]$neighbours
