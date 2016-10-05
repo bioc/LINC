@@ -51,7 +51,7 @@ linc(object,
  a \code{matrix}, \code{data.frame} or \code{ExpressionSet} with genes corresponding to rows, preferentially the high-variance genes in a given set
 }
   \item{codingGenes}{
-a \code{logical} vector with the same length of the supplied genes in \code{object}. \code{TRUE} indicates that the gene is a protein-coding one. Alternatively, \code{codingGenes} can be a vector naming the protein-coding genes.
+a \code{logical} vector with the same length of the supplied genes in \code{object}. \code{TRUE} indicates that the gene is a protein-coding one. Alternatively, \code{codingGenes} can be a vector of gene biotypes.
 }
   \item{corMethod}{
 a method for the correlation function; has to be one of \code{c("pearson", "kendall", "spearman", "user")}
