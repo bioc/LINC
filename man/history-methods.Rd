@@ -1,5 +1,6 @@
 \name{history-methods}
 \docType{methods}
+\alias{history}
 \alias{history-methods}
 \alias{history,LINCbio-method}
 \alias{history,LINCcluster-method}
