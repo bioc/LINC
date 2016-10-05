@@ -534,14 +534,9 @@ querycluster <- function(query = NULL,
                          font.size = 3,
                          low = "white", high = "firebrick4")
   
-  plot_tree <- (clust_heat +  ggtitle(queryTitle) + theme(
+  plot_it <- (clust_heat +  ggtitle(queryTitle) + theme(
     plot.title = element_text(face = "bold", size = 20)))
-  
-  querycluster_img <- readPNG(system.file("extdata", "querycluster_img.png",
-                                          package ="LINC"))
-  querycluster <- rasterGrob(querycluster_img, interpolate = TRUE)
-  
-  plot_it <- grid.arrange(querycluster, plot_tree, ncol = 2)
+
   # return
   if(returnDat){
     return(list(cluster = dist_phylo,
