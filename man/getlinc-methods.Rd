@@ -36,7 +36,7 @@ has to be one of \code{c("queries", "geneSystem", "results", "history", "customI
 
 
 \value{
-the respective substructure or infromation
+the respective substructure or information
   }
 
 \author{
