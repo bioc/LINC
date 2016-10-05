@@ -2005,7 +2005,7 @@ setMethod(f = "singlelinc",
             
           if(is.element("OrgDb", names(formals(eF_promise)))){
            bio <- eF_promise(entrez_query,
-                             OrgDb = OrgDb, ont = ot_promise, ...)
+                             OrgDb, ont = ot_promise, ...)
           }  
             
           if(is.element("organism", names(formals(eF_promise)))){
@@ -2015,7 +2015,7 @@ setMethod(f = "singlelinc",
            bio <- eF_promise(entrez_query, organism = OrgDb, ...)
           }    
             
-          if(!is.element("organism", names(formals(eF_promise)))){
+          if(!any(is.element(c("OrgDb", "organism"), names(formals(eF_promise))))){
            bio <- eF_promise(entrez_query, ...)
           }    
           
