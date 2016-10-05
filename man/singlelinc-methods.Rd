@@ -26,8 +26,8 @@ singlelinc(input,
       threshold = 0.05,
         underth = TRUE,
       coExprCut,
-  handleGeneIds = TRUE,
-  annotateFrom  = 'enrichGO',
+     enrichFun  = 'enrichGO',
+           ont  = "BP", 
         verbose = TRUE,
         ...)
 }
@@ -57,11 +57,11 @@ if \code{TRUE} values lower than the threshold will be considered (intended for 
   \item{coExprCut}{
 a single \code{integer} indicating the maximal number of co-expressed genes to select. In case too many genes fulfill the supplied \code{threshold} criterion their number can be reduced by this argument.
 }
-  \item{handleGeneIds}{
-if \code{TRUE} attempt to recognize and handle issues with incompatible gene systems. If \code{FALSE} skip this section.     
+  \item{enrichFun}{
+a function given as character string which will derive significant biological terms based on the set of co-expressed genes from a gene annotation resource. Supported functions are:  \code{c("enrichGO", "enrichPathway", "enrichDO")}  
 }
-  \item{annotateFrom}{
-a function which will derive significant biological terms based on the set of co-expressed genes from a gene annotation resource.   
+  \item{ont}{
+a subontology, only used for \code{enrichFun = 'enrichGO'}. This has to be one of \code{"MF", "BP", "CC"}.
 }
   \item{verbose}{
 whether to give messages about the progression of the function \code{TRUE} or not \code{FALSE}
@@ -103,22 +103,18 @@ Manuel Goepferich
 data(BRAIN_EXPR)
 
 # selection based on absolute correlation
+ meg3 <- singlelinc(crbl_matrix, query = "55384", onlycor = TRUE, underth = FALSE, threshold = 0.5)
+ plotlinc(meg3)
 
-meg3 <- try(singlelinc(crbl_matrix, query = "55384", onlycor = TRUE, underth = FALSE, threshold = 0.5),
-            silent = TRUE)
-
-# NOT RUN:
-# meg3 <- singlelinc(crbl_matrix, query = "55384", onlycor = TRUE, underth = FALSE, threshold = 0.5)
-# plotlinc(meg3)
-
-# get biological processes from 'Gene Ontology'
-# meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'BP')
-# plotlinc(meg3)
+# get molecular functions from 'Gene Ontology'
+ meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'BP')
+ plotlinc(meg3)
 
 # get enriched pathways from 'ReatomePA'
-# meg3 <- singlelinc(crbl_matrix, query = "55384", onlycor = TRUE, underth = FALSE, threshold = 0.5,
-#                   annotateFrom = 'enrichPathway')
-# plotlinc(meg3)
+meg3 <- singlelinc(crbl_matrix, query = "55384",
+                   onlycor = TRUE, underth = FALSE,
+                   threshold = 0.5, enrichFun = 'enrichPathway')
+plotlinc(meg3)
 }  
 \keyword{ ~singlelinc }
 \keyword{methods}
