@@ -1992,7 +1992,7 @@ setMethod(f = "singlelinc",
             }          
                       
             ot_promise <- match.arg(ont, c("MF", "BP", "CC"))
-            kt_promise <- identifyGenes(unlist(ll_promise))
+            kt_promise <- identifyGenes(unlist(qg_promise))
             
             if(kt_promise == "ENTREZID"){
               entrez_query <- qg_promise
