@@ -1060,7 +1060,7 @@ setMethod(f     = "getbio",
                                           "enrichPathway",
                                           "enrichDO")),
                               silent = TRUE)
-            if(class(cP_promise) == "try-error") warning(warnim01)
+            if(class(eF_promise) == "try-error") warning(warnim01)
             message(eval(inform01))
                       
             if(is.element("OrgDb", ls(history(cluster)))){
