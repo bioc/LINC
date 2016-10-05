@@ -99,20 +99,23 @@ identifyGenes <-  function(gene){
                 "ENSP.*",
                 "[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}",
                 "Hs\\.([0-9]).*",
-                "(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|YP|ZP)_[0-9]+")
+                "(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|YP|ZP)_[0-9]+",
+                "[A-Za-z0-9]{1,2}")
   
-  genesys <- c("entrezgene",
-               "ensemblgene",
-               "ensembltranscript",
-               "ensemblprotein",
-               "uniprot",
-               "unigene",
-               "refseq")
+  genesys <- c("ENTREZID",
+               "ENSEMBL",
+               "ENSEMBLTRANS",
+               "ENSEMBLPROT",
+               "UNIPROT",
+               "UNIGENE",
+               "REFSEQ",
+               "SYMBOL")
   
   grepres <- lapply(genepat, function(x, gene) {
     grep(x, gene, perl = TRUE) }, gene)  
   greptfv <- lapply(grepres, function(x){ length(x) > 0 })
-  return(genesys[unlist(greptfv)])
+  keytype <- genesys[unlist(greptfv)]
+  return(keytype[1])
 }
 
 ## HELPING FUNCTION "modZscore"
