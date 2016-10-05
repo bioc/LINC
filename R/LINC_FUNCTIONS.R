@@ -613,7 +613,7 @@ getcoexpr<- function(input, query = NULL, keyType = NULL){
     if(class(ip_promise) != "try-error"){
     ip_promise 
     }
-    
+  }  
     if(is.null(keyType)){
       return(ip_promise)
     } else {
@@ -623,6 +623,4 @@ getcoexpr<- function(input, query = NULL, keyType = NULL){
                 OrgDb = OrgDb, toType = keyType)
       return(x[, keyType])    
     }
-    
-  }
 }
