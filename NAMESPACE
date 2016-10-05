@@ -40,7 +40,7 @@ export(querycluster)
 export(feature)
 export(linctable)
 export(getcoexpr)
-export(overlaylinc)
+export(changeOrgDb)
 
 
 
