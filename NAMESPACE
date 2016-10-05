@@ -41,7 +41,12 @@ export(feature)
 export(linctable)
 export(getcoexpr)
 export(changeOrgDb)
-
+export(results)
+export(correlation)
+export(assignment)
+export(express)
+export(history)
+export(linCenvir)
 
 
 exportClass("LINCmatrix")
