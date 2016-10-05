@@ -580,7 +580,7 @@ setMethod(f   = "listQuery",
           })
 
 # function getcoexpr
-getcoexpr<- function(input, query = NULL){
+getcoexpr<- function(input, query = NULL, keyType = NULL){
   
   # check the class          
   if(!any(is.element(class(input), 
@@ -589,6 +589,14 @@ getcoexpr<- function(input, query = NULL){
     stop("input is not of a supported 'LINC' class")
   } 
   
+  # look for OrgDb
+  if(is.element("OrgDb", ls(history(input)))){
+    OrgDb <- get("OrgDb", envir = history(input))
+  } else {
+    OrgDb <- 'org.Hs.eg.db'
+  }
+  
+  
   if(class(input) == "LINCcluster"){
     ip_promise  <- try(results(input)$cluster$neighbours[
       names(results(input)$cluster$neighbours) == query],
@@ -596,7 +604,6 @@ getcoexpr<- function(input, query = NULL){
     if(class(ip_promise) != "try-error"){
       ip_promise <- unlist(ip_promise)
       names(ip_promise) <- NULL
-      return(ip_promise)
     }
   }
   
@@ -604,9 +611,18 @@ getcoexpr<- function(input, query = NULL){
     ip_promise  <- try(names(results(input)$cor),
                        silent = TRUE)
     if(class(ip_promise) != "try-error"){
-      return(ip_promise)
+    ip_promise 
     }
+    
+    if(is.null(keyType)){
+      return(ip_promise)
+    } else {
+      kt_promise <- identifyGenes(ip_promise)
+      x <- clusterProfiler::bitr(ip_promise,
+                fromType = kt_promise,
+                OrgDb = OrgDb, toType = keyType)
+      return(x[, keyType])    
+    }
+    
   }
 }
-
-
