@@ -40,8 +40,8 @@ further arguments, mainly for functions from \code{clusterProfiler}
 }
 
 \details{
-In contrast to the function \code{singlelinc} here, a group of queries, those present in the input cluster, will be analyzed for enriched biological terms. The annotation function can be one of \code{c("enrichGO", "enrichKEGG", "enrichPathway", "enrichDO")} [1].
-The gene system of the input object has to be either Entrez or Ensembl. For Ensembl \code{mygene} [2] will be loaded in order to translate gene ids. Importanly, functions from \code{clusterProfiler} [1] require Entrez ids.
+In contrast to the function \code{singlelinc} here, a group of queries, those present in the input cluster, will be analyzed for enriched biological terms. The annotation function can be one of \code{c("enrichGO", "enrichPathway", "enrichDO")}. [1]
+The gene system of the input object has to be translated for the enrichment function in case genes are not given as Entrez ids. The function \code{clusterProfiler:bitr} [2] will be used in order to translate gene ids.
 }
 
 \value{
