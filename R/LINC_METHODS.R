@@ -1109,7 +1109,7 @@ setMethod(f     = "getbio",
             ## SECTION3: PREPARATION OF OUTPUT
             #out_linc             <- LINCbio()
             out_linc             <- new("LINCbio")
-            results(out_linc)     <- bio  
+            results(out_linc)     <- list(bio)  
             assignment(out_linc)  <- assignment(cluster)
             correlation(out_linc) <- correlation(cluster)
             express(out_linc)  <- express(cluster)
