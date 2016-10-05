@@ -530,16 +530,18 @@ querycluster <- function(query = NULL,
   clust_heat <- gheatmap(tree, n_partner, offset = 0.3,
                          width = 1.2, colnames = TRUE,
                          colnames_position = "top",
-                         low = "white", high = "black")
+                         color = "grey", hjust = 1,
+                         font.size = 3,
+                         low = "white", high = "firebrick4")
   
-  plot_tree <- (tree +  ggtitle(queryTitle) + theme(
-    plot.title = element_text(face = "bold", size = 25)))
+  plot_tree <- (clust_heat +  ggtitle(queryTitle) + theme(
+    plot.title = element_text(face = "bold", size = 20)))
   
   querycluster_img <- readPNG(system.file("extdata", "querycluster_img.png",
                                           package ="LINC"))
   querycluster <- rasterGrob(querycluster_img, interpolate = TRUE)
   
-  plot_it <- grid.arrange(querycluster, clust_heat, ncol = 2)
+  plot_it <- grid.arrange(querycluster, plot_tree, ncol = 2)
   # return
   if(returnDat){
     return(list(cluster = dist_phylo,
