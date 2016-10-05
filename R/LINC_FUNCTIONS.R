@@ -11,6 +11,61 @@
                             "(Co-Expression Analysis of lincRNAs)"))
 }
 
+# HELPING FUNCTION 'changeOrgDb': write information about organism into the
+# history slot of a oject of the 'LINC' class
+changeOrgDb <- function(object, OrgDb){
+  
+  og_promise <- match.arg(OrgDb,
+                          c("org.Ag.eg.db",
+                            "org.At.tair.db",
+                            "org.Bt.eg.db",
+                            "org.Cf.eg.db",
+                            "org.Ce.eg.db",
+                            "org.Gg.eg.db",
+                            "org.Pt.eg.db",
+                            "org.Sco.eg.db", 
+                            "org.EcK12.eg.db",
+                            "org.EcSakai.eg.db",
+                            "org.Dm.eg.db",
+                            "org.Tgondii.eg.db",
+                            "org.Hs.eg.db",
+                            "org.Pf.plasmo.db",
+                            "org.Mm.eg.db",
+                            "org.Ss.eg.db",
+                            "org.Rn.eg.db",
+                            "org.Mmu.eg.db",
+                            "org.Xl.eg.db",
+                            "org.Sc.sgd.db",
+                            "org.Dr.eg.db",
+                            "anopheles",   
+                            "arabidopsis", 
+                            "bovine",      
+                            "canine",      
+                            "celegans",    
+                            "chicken",    
+                            "chimp",       
+                            "coelicolor",  
+                            "ecolik12",    
+                            "ecsakai",     
+                            "fly",         
+                            "gondii",      
+                            "human",       
+                            "malaria",     
+                            "mouse",       
+                            "pig",         
+                            "rat",         
+                            "rhesus",      
+                            "xenopus",    
+                            "yeast",       
+                            "zebrafish"))            
+  
+  if(is.element("history", slotNames(object))){
+    history(object) <- og_promise
+  } else {
+    stop("Cannot change OrgDb for this object!")
+  }   
+}
+
 # set a global binding for variables in ggplot functions
 ASSIGNMENT <- NA; CORRELATION <- NA; EXPRESSION <- NA;
 NO_SUBJECT <- NA; PC <- NA; SAMPLES <- NA
