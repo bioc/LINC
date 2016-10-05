@@ -532,7 +532,7 @@ querycluster <- function(query = NULL,
                          colnames_position = "top",
                          color = "grey", hjust = 0.5,
                          font.size = 3,
-                         low = "white", high = "firebrick4")
+                         low = "white", high = "dodgerblue4")
   
   plot_it <- (clust_heat +  ggtitle(queryTitle) + theme(
     plot.title = element_text(face = "bold", size = 20)))
