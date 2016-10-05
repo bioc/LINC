@@ -1083,7 +1083,7 @@ setMethod(f     = "getbio",
               x <- bitr(x, fromType = kt_promise,
                      OrgDb = OrgDb, toType = "ENTREZID")
               return(x$ENTREZID)          
-              }, OrgDb)
+              })
             }
             
           ## SECTION2: CALL TO GENE ANNOTATION
