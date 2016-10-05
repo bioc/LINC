@@ -530,7 +530,7 @@ querycluster <- function(query = NULL,
   clust_heat <- gheatmap(tree, n_partner, offset = 0.3,
                          width = 1.2, colnames = TRUE,
                          colnames_position = "top",
-                         color = "grey", hjust = 0,
+                         color = "grey", hjust = 0.5,
                          font.size = 3,
                          low = "white", high = "firebrick4")
   
