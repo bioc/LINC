@@ -1979,7 +1979,7 @@ setMethod(f = "singlelinc",
                                          "enrichPathway",
                                          "enrichDO")),
                                           silent = TRUE)
-            if(class(cP_promise) == "try-error") warning(warnim01)
+            if(class(eF_promise) == "try-error") warning(warnim01)
             message(eval(inform04))
             eF_promise  <- get(eF_promise, mode = "function",
                                envir = loadNamespace('LINC'))
