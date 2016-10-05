@@ -1983,8 +1983,7 @@ setMethod(f = "singlelinc",
             message(eval(inform04))
             eF_promise  <- get(eF_promise, mode = "function",
                                envir = loadNamespace('LINC'))
-            
-                      
+                                  
             if(is.element("OrgDb", ls(history(input)))){
               OrgDb <- get("OrgDb", envir = history(input))
             } else {
@@ -2013,7 +2012,7 @@ setMethod(f = "singlelinc",
             if(OrgDb == 'org.Hs.eg.db'){
               OrgDb <- "human"
             }
-           bio <- eF_promise(entrez_query, organism = og_promise, ...)
+           bio <- eF_promise(entrez_query, organism = OrgDb, ...)
           }    
             
           if(!is.element("organism", names(formals(eF_promise)))){
