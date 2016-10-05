@@ -570,7 +570,7 @@ setMethod(f   = "listQuery",
           signature = c("LINCbio"),  
           def = function(
             input){
-            return( names(results(linCenvir(input)$bio)[[1]]) ) 
+            return( names(results(input)[[1]]@geneClusters) ) 
           })
 setMethod(f   = "listQuery",
           signature = c("LINCsingle"),  
