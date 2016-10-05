@@ -1848,10 +1848,10 @@ setMethod(f = "singlelinc",
                               "genes was reduced by 'coExprCut'")
             inform03 <- quote(paste("singlelinc: co-expression",
                                     "analysis yielded", ql_promise, "genes"))                                       
-            inform04 <- paste("getbio: The function", enrichFun,
-                              "will be called.")
-            inform05 <- paste("getbio: Gene ids will be translated from", 
-                              kt_promise, "to entrez identifiers")       
+            inform04 <- quote(paste("getbio: The function", enrichFun,
+                              "will be called."))
+            inform05 <- quote(paste("getbio: Gene ids will be translated from", 
+                              kt_promise, "to entrez identifiers"))       
                     
             # get information from 'linc' 
             validObject(input)  
@@ -1980,7 +1980,7 @@ setMethod(f = "singlelinc",
                                          "enrichDO")),
                                           silent = TRUE)
             if(class(cP_promise) == "try-error") warning(warnim01)
-            message(inform04)
+            message(eval(inform04))
             eF_promise  <- get(eF_promise, mode = "function",
                                envir = loadNamespace('LINC'))
             
@@ -1997,7 +1997,7 @@ setMethod(f = "singlelinc",
             if(kt_promise == "ENTREZID"){
               entrez_query <- qg_promise
             } else {
-              message(inform05)
+              message(eval(inform05))
               entrez_query <- bitr(qg_promise, fromType = kt_promise,
                      OrgDb = OrgDb, toType = "ENTREZID")
             }
