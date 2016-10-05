@@ -9,7 +9,7 @@ import(methods)
 
 importFrom(DOSE, enrichDO)
 importFrom(ReactomePA, enrichPathway)
-importFrom(clusterProfiler, enrichGO, compareCluster)
+importFrom(clusterProfiler, enrichGO, compareCluster, bitr)
 
 importFrom(gridExtra, grid.arrange)
 importFrom(grid, rasterGrob)
