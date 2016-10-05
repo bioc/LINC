@@ -1985,8 +1985,8 @@ setMethod(f = "singlelinc",
                                envir = loadNamespace('LINC'))
             
                       
-            if(is.element("OrgDb", ls(history(cluster)))){
-              OrgDb <- get("OrgDb", envir = history(cluster))
+            if(is.element("OrgDb", ls(history(input)))){
+              OrgDb <- get("OrgDb", envir = history(input))
             } else {
               OrgDb <- 'org.Hs.eg.db'
             }          
@@ -1999,7 +1999,7 @@ setMethod(f = "singlelinc",
             } else {
               message(eval(inform05))
               entrez_query <- bitr(qg_promise, fromType = kt_promise,
-                     OrgDb = OrgDb, toType = "ENTREZID")
+                     OrgDb = OrgDb, toType = "ENTREZID")$ENTREZID
             }
             
           ## SECTION2: CALL TO GENE ANNOTATION
