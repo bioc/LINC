@@ -2412,18 +2412,6 @@ setGeneric(name = "linctable",
              standardGeneric("linctable")
            })
 setMethod(f   = "linctable",
-          signature = c("character", "LINCbio"),  
-          def = function(
-            file_name = "linc_table",
-            input){
-            pre <- results(input)
-            tab <- lapply(pre[[1]], function(y){y[[2]][1:500] })
-            m_tab <- matrix(unlist(tab), ncol = 500, nrow = length(tab), byrow = TRUE )
-            rownames(m_tab) <- names(tab)
-            write.table(m_tab, file = file_name, col.names = FALSE, sep = "\t"  )
-            message("table of enriched terms written")
-          })
-setMethod(f   = "linctable",
           signature = c("character", "LINCcluster"),  
           def = function(
             file_name = "linc_table",
