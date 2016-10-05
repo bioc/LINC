@@ -19,9 +19,8 @@ The function provides an interface to the \code{clusterProfiler} package. For ea
 
 \usage{
 getbio(cluster,
-       translate      = "mygene",
-       annotateFrom   = 'enrichGO',
-       verbose        = TRUE,
+       enrichFun   = 'enrichGO',
+       ont = "BP",
        ...)
 }
 
@@ -29,14 +28,11 @@ getbio(cluster,
   \item{cluster}{
  a \code{'LINCcluster'}. The number of co-expressed genes has to be sufficient.
 }
-  \item{translate}{
-one of \code{c("mygene", "none")}. For \code{"mygene"} the correspondent package will be loaded for gene id translation from Ensembl to Entrez. For \code{"none"} no translation will be called.
+  \item{enrichFun}{
+a function given as character string which will derive significant biological terms based on the set of co-expressed genes from a gene annotation resource. Supported functions are:  \code{c("enrichGO", "enrichPathway", "enrichDO")}  
 }
-  \item{annotateFrom}{
-a function which will derive significant biological terms based on the set of co-expressed genes from a gene annotation resource.   
-}
-  \item{verbose}{
-whether to give messages about the progression of the function \code{TRUE} or not \code{FALSE}
+  \item{ont}{
+a subontology, only used for \code{enrichFun = 'enrichGO'}. This has to be one of \code{"MF", "BP", "CC"}.
 }
   \item{...}{
 further arguments, mainly for functions from \code{clusterProfiler}
@@ -62,9 +58,6 @@ an object of the class 'LINCmatrix' (S4) with 6 \code{Slots}
 \references{
 [1] Yu G, Wang L, Han Y and He Q (2012). "clusterProfiler: an R package for comparing biological themes among gene clusters." OMICS: A Journal of Integrative Biology, 16(5), pp. 284-287. 
 (https://www.bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
-
-[2] Mark A, Thompson R and Wu C (2014). mygene: Access MyGene.Info_ services. R package version 1.8.0.
-(https://www.bioconductor.org/packages/release/bioc/html/mygene.html)
 }
 \author{
 Manuel Goepferich
@@ -73,13 +66,12 @@ Manuel Goepferich
 \seealso{
 \code{clusterlinc} ; 
 \code{singlelinc} ;
-\code{overlaylinc}
 }
 \examples{
 data(BRAIN_EXPR)
 
 ## Find the enriched cellular components for each query in the cluster 
-crbl_cc <- getbio(crbl_cluster, translate = 'none', ont = "CC")
+crbl_cc <- getbio(crbl_cluster, ont = "CC")
 plotlinc(crbl_cc)
 }  
 \keyword{ ~getbio }
