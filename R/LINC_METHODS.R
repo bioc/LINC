@@ -1627,7 +1627,7 @@ setMethod(f   = "plotlinc",
             
             qy_gg_ns <- ggplot(expr_df, environment = environment()) + geom_bar(aes(x = SAMPLES, 
                                                        y = EXPRESSION), stat = "identity", colour =
-                                                     "firebrick", fill = "blue", alpha = 0.1 ) +
+                                                     "darkblue", fill = "blue", alpha = 0.1 ) +
               theme(panel.background = element_blank(),
                     panel.border = element_rect(color = "grey",
                                                 fill = NA))
