@@ -3,7 +3,6 @@
 \alias{+}
 \alias{Arith}
 \alias{+-methods}
-\alias{+,LINCbio,LINCbio-method} 
 \alias{+,LINCbio,LINCfeature-method}
 \alias{+,LINCcluster,LINCfeature-method}
 \alias{+,LINCmatrix,LINCfeature-method}
@@ -15,10 +14,6 @@
 }
 \section{Methods}{
 \describe{
-
-\item{\code{signature(e1 = "LINCbio", e2 = "LINCbio")}}{
-(biological term intersection)
-}
 
 \item{\code{signature(e1 = "LINCbio", e2 = "LINCfeature")}}{
 (see \code{feature()})
