@@ -9,7 +9,8 @@
 }
 \usage{
 getcoexpr(input,
-          query   = NULL)
+          query   = NULL,
+          keyType = NULL)
 }
 
 \arguments{
@@ -18,6 +19,9 @@ a \code{'LINCcluster'} or \code{'LINCsingle'} object
 }
   \item{query}{
 for a \code{'LINCcluster'} the name of the query gene
+}
+   \item{query}{
+The \code{'keyType'} (gene system) for the output.
 }
 }
 
@@ -32,8 +36,10 @@ Manuel Goepferich
 
 \examples{
 data(BRAIN_EXPR)
+# Get the co-expressed genes for the query gene '55384' alias MEG3
+getcoexpr(crbl_cluster, query = "55384")
 
-# Get the co-expressed genes for the gene with the entrez id "441951" (ZFAS1)
-getcoexpr(crbl_cluster, "441951" )
+# The co-expressed genes can also be returned as gene symbols.
+getcoexpr(crbl_cluster, query = "55384", keyType = 'SYMBOL')
 }  
 \keyword{ ~getcoexpr }
