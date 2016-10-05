@@ -1080,9 +1080,10 @@ setMethod(f     = "getbio",
             } else {
               message(eval(inform02))
               cc_list <- lapply(ll_promise, function(x){
-                bitr(x, fromType = kt_promise,
+              x <- bitr(x, fromType = kt_promise,
                      OrgDb = OrgDb, toType = "ENTREZID")
-              }, organism)
+              return(x$ENTREZID)          
+              }, OrgDb)
             }
             
           ## SECTION2: CALL TO GENE ANNOTATION
