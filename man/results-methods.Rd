@@ -1,6 +1,7 @@
 \name{results-methods}
 \docType{methods}
 \alias{results-methods}
+\alias{results}
 \alias{results,LINCbio-method}
 \alias{results,LINCcluster-method}
 \alias{results,LINCmatrix-method}
