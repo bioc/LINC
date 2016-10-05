@@ -1,6 +1,7 @@
 \name{linCenvir-methods}
 \docType{methods}
 \alias{linCenvir-methods}
+\alias{linCenvir}
 \alias{linCenvir,LINCbio-method}
 \alias{linCenvir,LINCcluster-method}
 \alias{linCenvir,LINCmatrix-method}
