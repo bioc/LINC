@@ -1,7 +1,8 @@
-CHANGES IN VERSION  1.0.1
+CHANGES IN VERSION  1.1.3
 -------------------------
 
 NEW FEATURES
 
     o This is a developmental version. 
     o This version will be updated for the release cycle October 2016. 
+    o Some plotting functions are currently not evaluated due to issues with package 'ggtree'
