@@ -107,13 +107,13 @@ data(BRAIN_EXPR)
  plotlinc(meg3)
 
 # get molecular functions from 'Gene Ontology'
- meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'BP')
+ meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'MF')
  plotlinc(meg3)
 
 # get enriched pathways from 'ReatomePA'
-meg3 <- singlelinc(crbl_matrix, query = "55384",
-                   onlycor = TRUE, underth = FALSE,
-                   threshold = 0.5, enrichFun = 'enrichPathway')
+#meg3 <- singlelinc(crbl_matrix, query = "55384",
+ #                  onlycor = TRUE, underth = FALSE,
+  #                 threshold = 0.5, enrichFun = 'enrichPathway')
 plotlinc(meg3)
 }  
 \keyword{ ~singlelinc }
