@@ -95,7 +95,7 @@ Manuel Goepferich
 \examples{
 data(BRAIN_EXPR)
 plotlinc(crbl_matrix)
-plotlinc(crbl_cluster)
+# plotlinc(crbl_cluster)
 
 # show correlations and expression; "647979" as query plus 4 subjects
 plotlinc(crbl_cluster, showCor = c("647979", "6726", "3337", "3304" ,"3320"))
