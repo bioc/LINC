@@ -74,11 +74,11 @@ hpc_cluster <- hpc_cluster + feature(customID = "HEALTHY_HPC", customCol = "blue
 crbl_cluster <- crbl_cluster + feature(customID = "HEALTHY_CRBL", customCol = "blue")
 
 # plot the dendrogram
-querycluster('647979', queryTitle = 'NORAD',
-             gbm_cluster,  # Glioblastoma
-             ctx_cluster,  # Cortex
-             hpc_cluster,  # Hippocampus
-             crbl_cluster) # Cerebellum
+#querycluster('647979', queryTitle = 'NORAD',
+ #            gbm_cluster,  # Glioblastoma
+  #           ctx_cluster,  # Cortex
+   #          hpc_cluster,  # Hippocampus
+    #         crbl_cluster) # Cerebellum
 
 # objects can also be supplied as a list
 query_list <- list(gbm_cluster,
@@ -87,11 +87,11 @@ query_list <- list(gbm_cluster,
                    crbl_cluster)
 
 # mo_promise is the (informal) argument for multiple objects
-querycluster(query = '647979', queryTitle = 'NORAD', mo_promise = query_list)
+# querycluster(query = '647979', queryTitle = 'NORAD', mo_promise = query_list)
 
 # used the Czekanovski dice distance based on the 25 best 
 # interaction partners in each tissue
-querycluster(query = '647979', method = "dicedist", traits = 25, mo_promise = query_list)
+# querycluster(query = '647979', method = "dicedist", traits = 25, mo_promise = query_list)
 
 # NOT RUN:
 # querycluster(query = '647979', method = "dicedist", mo_promise = query_list)
