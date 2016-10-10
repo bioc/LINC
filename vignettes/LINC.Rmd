@@ -135,7 +135,7 @@ Moreover, one could focus the analysis on a single query like MEG3. For a single
 ```{r fig.width = 23, fig.height = 10, warning = FALSE, message = FALSE, eval = TRUE}
 meg3 <- singlelinc(crbl_matrix, query = "55384",
                    onlycor = TRUE, underth = FALSE,
-                   threshold = 0.5, enrichFun = 'enrichPathway')
+                   threshold = 0.5, ont = 'MF')
 plotlinc(meg3)
 ```
 
@@ -179,7 +179,7 @@ What is the effect of removing the first seven PCs from the dataset for the pred
 ```{r fig.width = 23, fig.height = 10, warning = FALSE, message = FALSE, eval = TRUE}
 meg3_pca <- singlelinc(crbl_matrix_pca, query = "55384",
                    onlycor = TRUE, underth = FALSE,
-                   threshold = 0.5, enrichFun = 'enrichPathway')
+                   threshold = 0.5, ont = 'MF')
 plotlinc(meg3_pca)
 ```
 
