@@ -19,13 +19,13 @@ The function \code{singlelinc} perfroms co-expression analysis for a single quer
 
 \usage{
 singlelinc(input,
-           query,
+           query = NULL,
         onlycor = FALSE,
         testFun = cor.test,
     alternative = "greater",
       threshold = 0.05,
         underth = FALSE,
-      coExprCut,
+      coExprCut = NULL,
      enrichFun  = 'enrichGO',
            ont  = "BP", 
         verbose = TRUE,
