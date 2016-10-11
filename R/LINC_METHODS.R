@@ -1388,9 +1388,6 @@ setMethod(f   = "plotlinc",
             ## PREDEFINITIONs
             # on.exit(options(stringsAsFactors = TRUE)) 
             validObject(input)  
-            #require(RColorBrewer)
-            
-            linCenvir(input)$single
             
             query  <- results(linCenvir(input)$single)$query
             bio    <- results(linCenvir(input)$single)$bio
