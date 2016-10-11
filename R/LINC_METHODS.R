@@ -108,10 +108,10 @@ setMethod(f = "justlinc",
                               silent = TRUE)
             if(class(gD_promise) == "try-error" |
                length(gD_promise) == 0) stop(errorm00)
-            if(!any(is.element(gD_promise, "ensemblgene")))
+            if(!any(is.element(gD_promise, "ENSEMBL")))
               warning(warnim01)
-            if(!any(is.element(gD_promise, c("ensemblgene",
-                                             "entrezgene")))) stop(errorm06)
+            if(!any(is.element(gD_promise, c("ENSEMBL",
+                                             "ENTREZ")))) stop(errorm06)
             
             # removal of PC 
             rm_promise <- inlogical(rmPC, direct = TRUE)
@@ -133,7 +133,7 @@ setMethod(f = "justlinc",
             }
             
             # separation
-            if(any(is.element(gD_promise, "ensemblgene"))){
+            if(any(is.element(gD_promise, "ENSEMBL"))){
               in_match <- match(ENSG_PC$ENSG, rownames(object))
               pc_matrix  <- object[in_match[!is.na(in_match)], ]
               rownames(pc_matrix) <- ENSG_PC$ENTREZ
@@ -153,7 +153,7 @@ setMethod(f = "justlinc",
             if(any(is.element(targetGenes, ENSG_BIO$gene_biotype))){
               if(length(targetGenes) != 1) stop(errorm03) 
               
-              if(any(is.element(gD_promise, "ensemblgene"))){
+              if(any(is.element(gD_promise, "ENSEMBL"))){
                 nc_genes  <- ENSG_BIO$ensembl_gene_id[is.element(
                   ENSG_BIO$gene_biotype, targetGenes)]
               } else {
@@ -224,11 +224,9 @@ setMethod(f = "justlinc",
               if(length(which(!null_index)) < 10) stop(errorm00)
               pc_list <- pc_list[!null_index]
               pc_path <- try(compareCluster(pc_list, fun =
-                                              "enrichPathway"), silent = TRUE)
+                         "enrichGO", OrgDb = 'org.Hs.eg.db')
+                          , silent = TRUE)
               if(class(pc_path) == "try-error") stop(errorm00)
-              
-              
-              # a <- compareCluster(pc_list)
               
               ## SECTION 3: PLOTTING
               
@@ -297,15 +295,15 @@ setMethod(f = "justlinc",
                 l_cluster <- clusterlinc(l_matrix,
                                          pvalCutOff = 0.0005,
                                          verbose = FALSE)
-                final_list <- getbio(l_cluster, annotateFrom =
-                                       "enrichPathway",   
-                                     translate = "none", verbose = FALSE)
-                #to_return <- l_bio
+                final_list <- getbio(l_cluster, enrichFun =
+                                       'enrichGO')
                 plotlinc(final_list)
               } else {
-                final_list <- singlelinc(l_matrix, query = targetGenes,
-                                         threshold = 0.00005, annotateFrom =
-                                           "enrichPathway", verbose = FALSE)
+               final_list <- singlelinc(l_matrix, query = targetGenes,
+                                         underth = TRUE,
+                                         threshold = 0.0005,
+                                         ont = 'BP',
+                                         verbose = FALSE)
                 plotlinc(final_list)
               }
             }
