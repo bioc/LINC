@@ -249,9 +249,8 @@ The following commands show how *justlinc* is called. (Please note, that the lar
 ```{r fig.width = 14, fig.height = 12, warning = FALSE, message = FALSE, eval = FALSE}
 justlinc(GTEX_LIVER_CRUDE) # 'justlinc' will search for the 10 best candidates
 
-my_lincRNAs <- c("ENSG00000224153", "ENSG00000197813", "ENSG00000179136",
-                 "ENSG00000259439", "ENSG00000267462")
-res <- justlinc(GTEX_LIVER_CRUDE, targetGenes = my_lincRNAs) # 'justlinc' with queries
+my_lincRNAs <- c("ENSG00000197813") # This could also be a vector of ids 
+res <- justlinc(GTEX_LIVER_CRUDE, targetGenes = my_lincRNAs) # 'justlinc' with one query
 ```
 
 The optional argument *targetGenes* can be either a gene *'biotype'*, a single candidate gene or a vector of genes. For multiple candidate genes it is assumed that they have a connection, for instance comparable co-expression pattern. As distance measure of two lincRNAs the Czekanovski dice distance [9] is used.
