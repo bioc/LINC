@@ -24,7 +24,7 @@ singlelinc(input,
         testFun = cor.test,
     alternative = "greater",
       threshold = 0.05,
-        underth = TRUE,
+        underth = FALSE,
       coExprCut,
      enrichFun  = 'enrichGO',
            ont  = "BP", 
@@ -103,18 +103,13 @@ Manuel Goepferich
 data(BRAIN_EXPR)
 
 # selection based on absolute correlation
- meg3 <- singlelinc(crbl_matrix, query = "55384", onlycor = TRUE, underth = FALSE, threshold = 0.5)
- plotlinc(meg3)
-
-# get molecular functions from 'Gene Ontology'
- meg3 <- singlelinc(crbl_matrix, query = "55384", threshold = 0.00005, ont = 'MF')
- plotlinc(meg3)
-
-# get enriched pathways from 'ReatomePA'
-#meg3 <- singlelinc(crbl_matrix, query = "55384",
- #                  onlycor = TRUE, underth = FALSE,
-  #                 threshold = 0.5, enrichFun = 'enrichPathway')
+meg3 <- singlelinc(crbl_matrix, query = "55384", onlycor = TRUE, underth = FALSE, threshold = 0.5)
 plotlinc(meg3)
+
+# using the 'cor.test' in combination with 'underth = TRUE'
+meg3 <- singlelinc(crbl_matrix, query = "55384", underth = TRUE, threshold = 0.0005, ont = 'BP')
+plotlinc(meg3)
+ 
 }  
 \keyword{ ~singlelinc }
 \keyword{methods}
