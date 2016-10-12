@@ -121,8 +121,8 @@ crbl_cluster_hochberg <- clusterlinc(crbl_matrix, distMethod = "correlation",
                                    padjust = "hochberg", pvalCutOff = 0.05)
 
 # comparing two distance methods
-# plotlinc(crbl_cluster)
-# plotlinc(crbl_cluster_cor)
+ plotlinc(crbl_cluster)
+ plotlinc(crbl_cluster_cor)
 }  
 \keyword{ ~clusterlinc }
 \keyword{methods}
