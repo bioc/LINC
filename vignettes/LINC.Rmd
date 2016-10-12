@@ -115,7 +115,7 @@ crbl_cluster <- clusterlinc(crbl_matrix, pvalCutOff = 0.005)
 crbl_bp <- getbio(crbl_cluster)
 
 # Show the results as a plot!
-# plotlinc(crbl_bp)
+plotlinc(crbl_bp)
 ```
 
 This plot contains plenty of information. The figure in the lower panel depicts the results of the gene set enrichment analysis. In this case terms of the subontology 'BP' (Biological Process) from GO (Gene Ontology) are shown. The query with the Entrez id '55384' known as MEG3 (maternally expressed 3) is in this context co-expressed with genes involved in mRNA splicing and processing. This query exhibits also the highest expression level across the 9 analyzed lincRNA genes. Its partner in the cluster is '283131' NEAT1 (nuclear paraspeckle assembly transcript 1) for which no significant co-expression pattern was found in this context.
@@ -130,7 +130,7 @@ getcoexpr(crbl_cluster, query = "55384", keyType = 'SYMBOL')[1:5]
 
 ```
 
-Moreover, one could focus the analysis on a single query like MEG3. For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes. For multiple queries the workflow as sequence of function calls would be *linc()* -> *clusterlinc()* -> *getbio()* -> *plotlinc()* ... and *linc()* -> *singlelinc()* -> *plotlinc()* for a single query. If there are more than > 100 queries (lincRNA genes) in the matrix it will be beneficial to subset the expression matrix as mentioned before. Since the applied enrichment functions like *enrichPathway* expects Entrez ids the protein-coding genes should use this gene system. Identifiers of another gene systems will be translated to Entrez.
+Moreover, one could focus the analysis on a single query like MEG3. For a single query gene they function *singlelinc()* comes with many options in terms of co-expression selection. One can select for absolute values, negative correlations and a maximum for co-expressed genes. In contrast to *clusterlinc()*, *singlelinc()* will directly call a gene annotation resource for the co-expressed genes. For multiple queries the workflow as sequence of function calls would be *linc()* -> *clusterlinc()* -> *getbio()* -> *plotlinc()* ... and *linc()* -> *singlelinc()* -> *plotlinc()* for a single query. If there are more than > 100 queries (lincRNA genes) in the matrix it will be beneficial to subset the expression matrix as mentioned before. Since the applied enrichment functions like *enrichGO* expects Entrez ids the protein-coding genes should use this gene system. Identifiers of another gene systems will be translated to Entrez.
 
 ```{r fig.width = 23, fig.height = 10, warning = FALSE, message = FALSE, eval = TRUE}
 meg3 <- singlelinc(crbl_matrix, query = "55384",
@@ -139,7 +139,7 @@ meg3 <- singlelinc(crbl_matrix, query = "55384",
 plotlinc(meg3)
 ```
 
-This yields 22 genes which have a correlation of > 0.5 to the expression profile of MEG3. As for the cluster analysis 'mRNA Splicing' is again significant.
+This yields 22 genes which have a correlation of > 0.5 to the expression profile of MEG3. The molecular function ('MF') is related to histone modification.
 
 # 2.0 Advanced 1: Input Matrix and Statistics
 
@@ -183,7 +183,7 @@ meg3_pca <- singlelinc(crbl_matrix_pca, query = "55384",
 plotlinc(meg3_pca)
 ```
 
-Removing PCs changed the prediction! While 'mRNA Splicing' is still consistent (since this observation does not depend on the main variance in the dataset) the term 'Transcription' is no longer significant.
+Removing PCs changed the prediction! Observations which depend the main variance in the dataset are no longer significant.
 
 ```{r}
 intersect(getcoexpr(meg3), getcoexpr(meg3_pca))
@@ -265,12 +265,12 @@ data(BRAIN_EXPR)
 ```{r fig.width = 13, fig.height = 7.5, warning = FALSE, message = FALSE, eval = TRUE}
 # apply the distance method "correlation" instead of "dicedist", the default
 crbl_cluster_cor <- clusterlinc(crbl_matrix, distMethod = "correlation")
-# plotlinc(crbl_cluster_cor)
+plotlinc(crbl_cluster_cor)
 ```
 
 Another function *querycluster()* enables clustering not only across different lincRNAs in one dataset, but also clustering of one lincRNA in multiple datasets. In order to distinguish between different expression matrices the function *feature* can be applied in order to add user-defined names (*customID*) and colors (*customCol*).
 
-```{r fig.width = 13.5, fig.height = 6.5, warning = FALSE, fig.keep = 'last', eval = FALSE}
+```{r fig.width = 13.5, fig.height = 6.5, warning = FALSE, fig.keep = 'last', eval = TRUE}
 # add custom names and colors
 gbm_cluster  <-  gbm_cluster + feature(customID = "CANCER_GBM", customCol = "red")
 ctx_cluster  <-  ctx_cluster + feature(customID = "HEALTHY_CTX", customCol = "blue")
