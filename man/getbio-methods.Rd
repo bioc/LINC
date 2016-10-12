@@ -72,7 +72,7 @@ data(BRAIN_EXPR)
 
 ## Find the enriched cellular components for each query in the cluster 
 crbl_cc <- getbio(crbl_cluster, ont = "CC")
-# plotlinc(crbl_cc)
+ plotlinc(crbl_cc)
 }  
 \keyword{ ~getbio }
 \keyword{methods}
