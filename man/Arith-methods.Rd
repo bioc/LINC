@@ -34,7 +34,7 @@ data(BRAIN_EXPR)
 
 # add a custom name
 crbl_cluster_feat <- crbl_cluster + feature(customID = "CEREBELLUM")
-# plotlinc(crbl_cluster_feat)
+plotlinc(crbl_cluster_feat)
 
 }  
 
