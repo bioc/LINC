@@ -244,7 +244,7 @@ linctable(file_name = "crbl_co_expr", input = crbl_cluster)
 ```
 
 The function *justlinc* is a wrapper. It requires a gene expression matrix with columns corresponding to samples and rows to genes. A preprocessing of the matrix is not mandatory. Gene ids need to be given preferably as Ensembl gene ids. **Importanly, this function uses predefined thresholds, so it will not give a result in every case! On the other hand it does not need additional information.**  
-The following commands show how *justlinc* is called. (Please note, that the large gene expression matrix named *GTEX_LIVER_CRUDE* is not provided in this Version of the package.) 
+The following commands show how *justlinc* is called. (Please note, that the large gene expression matrix named *GTEX_LIVER_CRUDE* is not provided in this Version of the package. However, it can be downloaded from: https://github.com/ManuelGoepferich/EXPRESSION_DATA_LINC) 
 
 ```{r fig.width = 14, fig.height = 12, warning = FALSE, message = FALSE, eval = FALSE}
 justlinc(GTEX_LIVER_CRUDE) # 'justlinc' will search for the 10 best candidates
