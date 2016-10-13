@@ -1,14 +1,11 @@
 # LINC FUNCTIONS
 
-## 17 08 2016
 ############################################################
-## ISSUES:
-## native routines
 
 .onAttach <- function(...) {
   
-  packageStartupMessage(paste("This is LINC\n",
-                            "(Co-Expression Analysis of lincRNAs)"))
+  packageStartupMessage(paste("This is LINC - Co-Expression Analysis of lincRNAs\n",
+                            "(Manuel Goepferich & Carl Herrmann)"))
 }
 
 # HELPING FUNCTION 'changeOrgDb': write information about organism into the
