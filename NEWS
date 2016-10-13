@@ -1,8 +1,17 @@
-CHANGES IN VERSION  1.1.3
+CHANGES IN VERSION  1.1.6
 -------------------------
 
 NEW FEATURES
 
-    o This is a developmental version. 
-    o This version will be updated for the release cycle October 2016. 
-    o Some plotting functions are currently not evaluated due to issues with package 'ggtree'
+    o There is now a link to a GitHub repository included in the package vignette 
+      The example data for 'justlinc' can be downloaded from this website.
+
+SIGNIFICANT USER-LEVEL CHANGES
+
+    o Co-expressed genes can now be returned as gene symbols or other keytypes
+      using the function 'getcoexpr'.
+    
+BUG FIXES
+
+    o Standard values of arguments in 'singlelinc' are now consistent across
+      the definitions of generic function and methods.
