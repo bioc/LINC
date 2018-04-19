@@ -1546,7 +1546,7 @@ setMethod(f   = "plotlinc",
               clust_plot <- rasterGrob(clust_img, interpolate = TRUE)
               
               # plot the biological terms
-              term_cluster <- clusterProfiler::plot(bio_list,
+              term_cluster <- clusterProfiler::dotplot(bio_list,
                                                showCategory = 4) +
               theme(axis.text.x = element_text(angle = -90, hjust = 0,
                                                vjust = 0, size = 12,
